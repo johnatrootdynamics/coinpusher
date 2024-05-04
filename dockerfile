@@ -24,7 +24,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 
 # Set the working directory
-RUN pip3 install -r requirements.txt  
+RUN pip3 install -r requirements.txt
 
 
 
