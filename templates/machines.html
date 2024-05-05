@@ -4,15 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>List of Machines</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Machines List</h1>
-    <ul>
-        {% for machine in machines %}
-            <li>Name: {{ machine['name'] }}</li>
-            <li>Location: {{ machine['location'] }}</li>
-            <li>Status: {{ machine['machine_status'] }}</li>
-        {% endfor %}
-    </ul>
+    <h1 class="my-4 text-center">Machines List</h1>
+    <div class="container">
+        <div class="row">
+            {% for machine in machines %}
+                <div class="col-md-4">
+                    <div class="card mb-4 box-shadow">
+                        <div class="card-header">
+                            Name: {{ machine['name'] }}
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Location: {{ machine['location'] }}</p>
+                            <p class="card-text">Status: 
+                                {% if machine['machine_status'] == 1 %}
+                                    Active
+                                {% elif machine['machine_status'] == 2 %}
+                                    Maintenance
+                                {% else %}
+                                    Offline
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Include Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
