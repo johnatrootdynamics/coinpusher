@@ -2,7 +2,7 @@
 from flask import Flask, render_template, jsonify
 from flask_mysqldb import MySQL
 from MySQLdb.cursors import DictCursor
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, join_room, leave_room
 import os
 dbuser = os.getenv('DBUSER', 'none')
 dbpasswd = os.getenv('DBPASSWD', 'none')
@@ -45,6 +45,26 @@ def machine_page(machine_id):
         return jsonify({"error": str(e)}), 500
     finally:
         cursor.close()
+
+
+
+
+@socketio.on('connect')
+def handle_connect():
+    print("Client connected")
+
+@socketio.on('join')
+def on_join(data):
+    machine_id = data['machine_id']
+    join_room(machine_id)
+    socketio.emit('update', {'message': f'Connected to machine {machine_id}'}, room=machine_id)
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print("Client disconnected")
+
+
+
 
 
 if __name__ == '__main__':

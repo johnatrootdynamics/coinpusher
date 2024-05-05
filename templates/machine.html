@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Machine: {{ machine[0].name }}</h1>
+        <h1>{{ machine[0].name }}</h1>
         <div> 
             {% if machine[0]['machine_status'] == 1 %}
             <span style="color: green;">Active</span>
@@ -21,22 +21,20 @@
         </div>
         <button id="connect" onclick="connectWebSocket()">Connect</button>
     </div>
+    <div class="container">
+        <h1>Monitoring Machine ID: {{ machine_id }}</h1>
+        <div id="status"></div>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
-    <!-- <script>
-        var socket;
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-        function connectWebSocket() {
-            socket = io.connect('http://' + document.domain + ':' + location.port);
-            
-            socket.on('connect', function() {
-                socket.emit('join', {machine_id: '{{ machine.id }}'});
-            });
+        socket.on('status_received', function(data) {
+            document.getElementById('status').textContent = 'Latest Update: ' + data.message;
+        });
 
-            socket.on('update', function(data) {
-                console.log('Update received:', data);
-            });
-        }
-    </script> -->
+        // Additional JavaScript for handling other real-time events
+    </script>
 </body>
 </html>
