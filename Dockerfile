@@ -3,7 +3,7 @@ FROM python:3.11.2
 EXPOSE 80
 ENV TZ="America/New_York"
 ARG db_user=${db_user}
-ARG db_passwd${db_passwd}
+ARG db_passwd=${db_passwd}
 ENV db_user=${db_user}
 ENV db_passwd=${db_passwd}
 # Install Git
