@@ -71,8 +71,9 @@ def handle_connect():
 
 @socketio.on('session_data')
 def session_data(data):
-    session['machine_id'] = data['machine_id']
-    os.write(1, data)
+    ndata = data['machine_id']
+    socketio.send("_____________GOT SESSION DATA______________")
+    os.write(1, ndata)
 
 @socketio.on('message')
 def handle_message(data):
