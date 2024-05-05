@@ -49,6 +49,7 @@ def signal_handler(sig, frame):
 try:
     sio.connect('http://coinpusheronline.root-dynamics.com')
     # Bind the signal handler to handle SIGINT (CTRL+C)
+    signal.signal(signal.SIGINT, signal_handler)
     time.sleep(2)
     update_machine_info()
     time.sleep(30)
