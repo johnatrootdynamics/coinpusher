@@ -1,5 +1,7 @@
 import socketio
 import time
+import signal
+import sys
 
 # Create a Socket.IO client instance
 sio = socketio.Client(logger=True, engineio_logger=True)  # Logging is optional but helpful for debugging
@@ -26,12 +28,32 @@ def status_updated(data):
 def disconnect():
     print("Disconnected from the server.")
 
+def signal_handler(sig, frame):
+    print('Disconnecting...')
+    if sio.connected:
+        sio.disconnect()
+    sys.exit(0)
+
 # Connect to the Flask-SocketIO server
+# try:
+#     sio.connect('http://coinpusheronline.root-dynamics.com')
+#     time.sleep(2)
+#     update_machine_info()
+#     sio.wait()
+#     sio.disconnect()
+# except socketio.exceptions.ConnectionError as e:
+#     print("Connection failed:", e)
+
+
+
 try:
     sio.connect('http://coinpusheronline.root-dynamics.com')
+    # Bind the signal handler to handle SIGINT (CTRL+C)
     time.sleep(2)
     update_machine_info()
     sio.wait()
     sio.disconnect()
+    signal.signal(signal.SIGINT, signal_handler)
+    sio.wait()
 except socketio.exceptions.ConnectionError as e:
-    print("Connection failed:", e)
+    print("Failed to connect to the server:", e)
