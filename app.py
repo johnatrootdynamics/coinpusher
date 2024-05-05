@@ -8,7 +8,7 @@ dbuser = os.getenv('DBUSER', 'none')
 dbpasswd = os.getenv('DBPASSWD', 'none')
 dbhost = os.getenv('DBHOST', 'none')
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config['MYSQL_HOST'] = dbhost
