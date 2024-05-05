@@ -85,6 +85,19 @@ def handle_myevent(data):
 
 @socketio.on('disconnect')
 def handle_disconnect():
+    cursor = mysql.connection.cursor()
+    machine_id = session['machine_id']
+
+    #Update Machines Status in SQL Based on Machine ID
+    try:
+        cursor.execute("UPDATE machines SET machine_status=%s WHERE id=%s", ("2", machine_id))
+        emit('status_updated', {'machine_id': machine_id, 'new_status': "2"}, broadcast=True)
+        socketio.send("Updated machien status")
+    except cursor.Error as e:
+        emit('error', {'message': 'Database error: ' + str(e)})
+    finally:
+        mysql.connection.commit()
+        cursor.close()
     print("Disconnected")
 
 
