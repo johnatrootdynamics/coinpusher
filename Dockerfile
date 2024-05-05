@@ -4,8 +4,10 @@ EXPOSE 80
 ENV TZ="America/New_York"
 ARG DBUSER=${DBUSER}
 ARG DBPASSWD=${DBPASSWD}
+ARG DBHOST=${DBHOST}
 ENV DBUSER=${DBUSER}
 ENV DBPASSWD=${DBPASS}
+ENV DBHOST=${DBHOST}
 # Install Git
 RUN apt update  -y
 RUN apt install python3-venv -y
