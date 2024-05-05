@@ -52,7 +52,5 @@ try:
     time.sleep(2)
     update_machine_info()
     sio.wait()
-    signal.signal(signal.SIGINT, signal_handler)
-    sio.wait()
 except socketio.exceptions.ConnectionError as e:
     print("Failed to connect to the server:", e)
