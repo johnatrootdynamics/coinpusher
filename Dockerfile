@@ -9,8 +9,6 @@ ENV DBUSER=${DBUSER}
 ENV DBPASSWD=${DBPASS}
 ENV DBHOST=${DBHOST}
 # Install Git
-RUN apt update  -y
-RUN apt install python3-venv -y
 RUN apt install -y git
 #RUN python -m pip install --upgrade pip
 # Clone the repository
@@ -19,11 +17,6 @@ RUN mkdir /app
 ADD https://www.google.com /time.now
 RUN git clone https://github.com/johnatrootdynamics/coinpusher /app
 WORKDIR /app
-ENV VIRTUAL_ENV=/opt/venv
-
-COPY * /opt/venv/
-RUN python3 -m venv $VIRTUAL_ENV
-ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Install dependencies:
 
