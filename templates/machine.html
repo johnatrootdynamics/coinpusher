@@ -28,13 +28,19 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
     <script>
-        var socket = io.connect('http://' + document.domain + ':' + location.port);
-
-        socket.on('status_received', function(data) {
-            document.getElementById('status').textContent = 'Latest Update: ' + data.message;
+        var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+        
+        socket.on('status_updated', function(data) {
+            console.log('Status Update Received:', data);
+            if (data.machine_id === "{{ machine_id }}") {
+                var statusElement = document.getElementById('status');
+                statusElement.innerHTML = 'Current Status: ' + data.new_status;
+            }
         });
-
-        // Additional JavaScript for handling other real-time events
+    
+        socket.on('error', function(data) {
+            console.error('Error:', data.message);
+        });
     </script>
 </body>
 </html>
