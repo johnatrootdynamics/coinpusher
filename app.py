@@ -81,7 +81,7 @@ def handle_connect(data):
     os.write(1, b'got update_machine message ')
     print(data)
     if data:
-        socketio.send(f"received")
+        socketio.send(f"received {data}")
     # cursor = mysql.connection.cursor()
     # machine_id = data['machine_id']
     # new_status = data['new_status']
