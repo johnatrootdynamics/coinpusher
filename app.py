@@ -20,6 +20,13 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
 
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+
+
 @app.route('/machines')
 def list_machines():
     cursor = mysql.connection.cursor()
@@ -48,12 +55,12 @@ def machine_page(machine_id):
 
 
 
-@socketio.on('message')
+@socketio.on('message', namespace='/test')
 def handle_message(data):
     print(f"Received message: {data}")
     socketio.send("Message received")
 
-@socketio.on('connect')
+@socketio.on('connect', namespace='/test')
 def handle_connect(data):
     print("Client connected")
     cursor = mysql.connection.cursor()
@@ -70,7 +77,7 @@ def handle_connect(data):
     finally:
         cursor.close()
 
-@socketio.on('update_machine_status')
+@socketio.on('update_machine_status', namespace='/test')
 def handle_update_status(data):
     cursor = mysql.connection.cursor()
     
