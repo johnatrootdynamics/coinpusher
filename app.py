@@ -60,6 +60,11 @@ def handle_message(data):
     print(f"Received message: {data}")
     socketio.send("Message received")
 
+@socketio.on('my_event')
+def handle_connect(data):
+    print("Sayin client is connected dawg")
+    socketio.send("got it dawg")
+
 @socketio.on('connect')
 def handle_connect(data):
     print("Client connected")
