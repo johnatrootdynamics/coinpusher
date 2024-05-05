@@ -22,7 +22,7 @@
         <button id="connect" onclick="connectWebSocket()">Connect</button>
     </div>
     <div class="container">
-        <h1>Monitoring Machine ID: {{ machine[0].machine_id }}</h1>
+        <h1>Monitoring Machine ID: {{ machine[0]['id'] }}</h1>
         <div id="status"></div>
     </div>
 
@@ -32,7 +32,7 @@
         
         socket.on('status_updated', function(data) {
             console.log('Status Update Received:', data);
-            if (data.machine_id === "{{ machine_id }}") {
+            if (data.machine_id === "{{ machine[0]['id'] }}") {
                 var statusElement = document.getElementById('status');
                 statusElement.innerHTML = 'Current Status: ' + data.new_status;
             }
