@@ -51,6 +51,7 @@ try:
     # Bind the signal handler to handle SIGINT (CTRL+C)
     time.sleep(2)
     update_machine_info()
+    time.sleep(30)
     sio.wait()
 except socketio.exceptions.ConnectionError as e:
     print("Failed to connect to the server:", e)
