@@ -48,6 +48,10 @@ def machine_page(machine_id):
 
 
 
+@socketio.on('message')
+def handle_message(data):
+    print(f"Received message: {data}")
+    socketio.send("Message received")
 
 @socketio.on('connect')
 def handle_connect(data):
@@ -87,7 +91,6 @@ def handle_update_status(data):
         emit('error', {'message': 'Database error: ' + str(e)})
     finally:
         cursor.close()
-        conn.close()
 
 
 
