@@ -73,6 +73,7 @@ def handle_myevent(data):
 @socketio.on('disconnect')
 def handle_disconnect():
     print("Disconnected")
+    
 
 @socketio.on('update_machine')
 def handle_connect(data):
