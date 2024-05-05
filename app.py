@@ -3,6 +3,7 @@ from flask import Flask, render_template, jsonify, session
 from flask_mysqldb import MySQL
 from MySQLdb.cursors import DictCursor
 from flask_socketio import SocketIO, join_room, leave_room, emit
+from flask_session import Session
 import os
 import logging
 import sys
@@ -21,7 +22,8 @@ app.config['MYSQL_DB'] = 'coin'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
-
+app.config['SESSION_TYPE'] = 'filesystem'
+Session(app)
 
 
 @app.route('/')
