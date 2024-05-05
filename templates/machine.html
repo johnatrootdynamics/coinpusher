@@ -11,9 +11,9 @@
     <div class="container">
         <h1>Machine: {{ machine[0].name }}</h1>
         <div> 
-            {% if machine['machine[0]_status'] == 1 %}
+            {% if machine[0]['machine_status'] == 1 %}
             <span style="color: green;">Active</span>
-            {% elif machine['machine[0]_status'] == 2 %}
+            {% elif machine[0]['machine_status'] == 2 %}
             <span style="color: orange;">Offline</span>
             {% else %}
             <span style="color: red;">Unknown</span>
