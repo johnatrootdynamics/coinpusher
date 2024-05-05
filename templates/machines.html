@@ -9,7 +9,7 @@
     <h1>Machines List</h1>
     <ul>
         {% for machine in machines %}
-            <li>ID: {{ machine.id }}, Location: {{ machine.location }}, Coins Left: {{ machine.coins_left }}, Status: {{ machine.status }}</li>
+            <li>ID: {{ machine['id'] }}, Location: {{ machine['location'] }}, Coins Left: {{ machine['coins_left'] }}, Status: {{ machine['machine_status'] }}</li>
         {% endfor %}
     </ul>
 </body>
