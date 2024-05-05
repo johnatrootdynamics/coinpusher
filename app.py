@@ -79,14 +79,14 @@ def session_data(data):
 @socketio.on('message')
 def handle_message(data):
     print(f"Received message: {data}")
-    socketio.send("Message received")
+    socketio.send("Message received from client")
     sys.stdout.write('got message  ')
-    os.write(1, b'got message  ')
+    os.write(1, b'__Function on server = message__  ')
 
 @socketio.on('my event')
 def handle_myevent(data):
     print("Sayin client is connected dawg")
-    socketio.send("got it dawg")
+    socketio.send('got "my event"')
 
 @socketio.on('disconnect')
 def handle_disconnect():
@@ -96,8 +96,8 @@ def handle_disconnect():
     #Update Machines Status in SQL Based on Machine ID
     try:
         cursor.execute("UPDATE machines SET machine_status=%s WHERE id=%s", ("2", machine_id))
-        emit('status_updated', {'machine_id': machine_id, 'new_status': "2"}, broadcast=True)
-        socketio.send("Updated machien status")
+        emit('status_updated', {'machine_id': machine_id, 'new_status': '2'}, broadcast=True)
+        socketio.send("Updated machine status on disconnect")
     except cursor.Error as e:
         emit('error', {'message': 'Database error: ' + str(e)})
     finally:
@@ -124,7 +124,7 @@ def handle_update_machine(data):
     try:
         cursor.execute("UPDATE machines SET machine_status=%s WHERE id=%s", (new_status, machine_id))
         emit('status_updated', {'machine_id': machine_id, 'new_status': new_status}, broadcast=True)
-        socketio.send("Updated machien status")
+        socketio.send("Updated machien status on update_machine")
     except cursor.Error as e:
         emit('error', {'message': 'Database error: ' + str(e)})
     finally:

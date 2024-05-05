@@ -12,7 +12,7 @@ def connect():
 
 @sio.event
 def message(data):
-    print('Received data:', data)
+    print('Received data from server:', data)
 
 @sio.event
 def update_machine_info():
