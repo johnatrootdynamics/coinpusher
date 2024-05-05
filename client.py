@@ -19,6 +19,10 @@ def update_machine_info():
     sio.emit('update_machine', {'machine_id': '1', 'machine_status': '6'})
 
 @sio.event
+def status_updated():
+    print("DB updated")
+
+@sio.event
 def disconnect():
     print("Disconnected from the server.")
 
