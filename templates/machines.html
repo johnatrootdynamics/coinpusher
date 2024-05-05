@@ -21,9 +21,9 @@
                             <p class="card-text">Location: {{ machine['location'] }}</p>
                             <p class="card-text">Status: 
                                 {% if machine['machine_status'] == 1 %}
-                                    Active
+                                    Available
                                 {% elif machine['machine_status'] == 2 %}
-                                    Maintenance
+                                    In Use
                                 {% else %}
                                     Offline
                                 {% endif %}
