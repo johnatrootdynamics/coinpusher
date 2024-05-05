@@ -69,9 +69,12 @@ def handle_myevent(data):
 def handle_disconnect():
     print("Disconnected")
 
-@socketio.on('connect')
+@socketio.on('update_machine')
 def handle_connect(data):
-    print("Client connected")
+    print("Client sent machine update")
+    print(data)
+    if data:
+        socketio.send(f"received {data}")
     # cursor = mysql.connection.cursor()
     # machine_id = data['machine_id']
     # new_status = data['new_status']
