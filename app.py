@@ -72,6 +72,8 @@ def handle_connect():
 @socketio.on('session_data')
 def session_data(data):
     session['machine_id'] = data['machine_id']
+    if session['machine_id']:
+        os.write(1, b'got the session machine id ')
 
 @socketio.on('message')
 def handle_message(data):
@@ -88,7 +90,7 @@ def handle_myevent(data):
 @socketio.on('disconnect')
 def handle_disconnect():
     cursor = mysql.connection.cursor()
-    machine_id = session['machine_id']
+    machine_id = session_data.session['machine_id']
 
     #Update Machines Status in SQL Based on Machine ID
     try:
