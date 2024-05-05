@@ -85,7 +85,7 @@ def handle_update_status(data):
     """
     try:
         cursor.execute(sql_update_query, (new_status, machine_id))
-        conn.commit()
+        cursor.commit()
         emit('status_updated', {'machine_id': machine_id, 'new_status': new_status}, broadcast=True)
     except MySQLdb.Error as e:
         emit('error', {'message': 'Database error: ' + str(e)})
