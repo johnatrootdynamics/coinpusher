@@ -20,7 +20,7 @@ def disconnect():
 # Connect to the Flask-SocketIO server
 try:
     sio.connect('http://coinpusheronline.root-dynamics.com')
-    
+    sio.wait()
     sio.disconnect()
 except socketio.exceptions.ConnectionError as e:
     print("Connection failed:", e)
