@@ -1,6 +1,5 @@
 
 from flask import Flask, render_template, jsonify
-import MySQLdb
 from flask_mysqldb import MySQL
 from MySQLdb.cursors import DictCursor
 import os
@@ -17,9 +16,6 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 mysql = MySQL(app)
 
-def get_db_connection():
-    conn = MySQLdb.connect(app)
-    return conn
 
 @app.route('/machines')
 def list_machines():
