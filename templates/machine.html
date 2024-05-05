@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ machine.name }}</title>
+    <title>{{ machine[0].name }}</title>
     <!-- Include Bootstrap CSS for styling -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>Machine: {{ machine.name }}</h1>
-        <div>Status: {{ machine.status }}</div>
+        <h1>Machine: {{ machine[0].name }}</h1>
+        <div>Status: {{ machine[0].status }}</div>
         <button id="connect" onclick="connectWebSocket()">Connect</button>
     </div>
 
