@@ -1,33 +1,46 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Machine Monitor</title>
+    <title>{{ machine[0].name }}</title>
+    <!-- Include Bootstrap CSS for styling -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>{{ machine[0].name }}</h1>
+        <div> 
+            {% if machine[0]['machine_status'] == 1 %}
+            <span style="color: green;">Active</span>
+            {% elif machine[0]['machine_status'] == 2 %}
+            <span style="color: orange;">Offline</span>
+            {% else %}
+            <span style="color: red;">Unknown</span>
+            {% endif %}
+        </div>
+        <button id="connect" onclick="connectWebSocket()">Connect</button>
+    </div>
+    <div class="container">
+        <h1>Monitoring Machine ID: {{ machine[0]['id'] }}</h1>
+        <div id="status">{{ machine[0]['machine_status'] }}</div>
+    </div>
+
+        <h1>Machine Monitor</h1>
+        <div id="status">Current Status: Loading...</div>
+        <button id="leftButton">Left</button>
+        <button id="rightButton">Right</button>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var socket = io.connect(window.location.origin);
-
-            socket.on('connect', function() {
-                console.log('Connected to server');
-            });
-
-            socket.on('status_updated', function(data) {
+        var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+        
+        socket.on('status_updated', function(data) {
             console.log('Status Update Received:', data);
             if (data.machine_id === "{{ machine[0]['id'] }}") {
                 var statusElement = document.getElementById('status');
                 statusElement.innerHTML = 'Current Status: ' + data.new_status;
             }
         });
-
-            socket.on('disconnect', function() {
-                console.log('Disconnected from server');
-            });
-
             // Function to send action data when buttons are clicked
             function sendAction(action) {
                 console.log('Sending action:', action);
@@ -41,13 +54,11 @@
             document.getElementById('rightButton').addEventListener('click', function() {
                 sendAction('right');
             });
+        socket.on('error', function(data) {
+            console.error('Error:', data.message);
         });
     </script>
-</head>
-<body>
-    <h1>Machine Monitor</h1>
-    <div id="status">Current Status: Loading...</div>
-    <button id="leftButton">Left</button>
-    <button id="rightButton">Right</button>
 </body>
 </html>
+
+
