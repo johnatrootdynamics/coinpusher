@@ -78,4 +78,4 @@ def list_machines():
 
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app(debug=True, allow_unsafe_werkzeug=True))
