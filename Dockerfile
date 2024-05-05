@@ -13,7 +13,6 @@ RUN mkdir /app
 ADD https://www.google.com /time.now
 RUN git clone https://github.com/johnatrootdynamics/coinpusher /app
 WORKDIR /app
-RUN mkdir static/uploads
 ENV VIRTUAL_ENV=/opt/venv
 COPY * /opt/venv/
 RUN python3 -m venv $VIRTUAL_ENV
