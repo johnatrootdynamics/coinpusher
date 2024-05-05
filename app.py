@@ -22,7 +22,7 @@ mysql = MySQL(app)
 def list_machines():
     cursor = mysql.connection.cursor()
     try:
-        cursor.execute("SELECT id, location, coins_left, machine_status FROM machines")
+        cursor.execute("SELECT id, name, location, machine_status FROM machines")
         machines = cursor.fetchall()  # Fetch all results
         return render_template('machines.html', machines=machines)
     except Exception as e:
