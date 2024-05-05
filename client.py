@@ -1,32 +1,25 @@
-import websocket
-import json
-import time
-from threading import Thread
+import socketio
 
-def on_message(ws, message):
-    print(f"Received message from server: {message}")
-    # Here you can add code to handle incoming messages, like commands to actuate machinery
+# Create a Socket.IO client instance
+sio = socketio.Client(logger=True, engineio_logger=True)  # Logging is optional but helpful for debugging
 
-def on_error(ws, error):
-    print(f"Error: {error}")
+# Define event handlers
+@sio.event
+def connect():
+    print("Connected to the server.")
+    sio.emit('my event', {'data': 'Client connected'})  # Example of sending data to the server
 
-def on_close(ws):
-    print("Connection Closed")
+@sio.event
+def message(data):
+    print('Received data:', data)
 
-def on_open(ws):
-    def run(*args):
-        while True:
-            # Send updates periodically or based on events
-            data = {'status': 'OK', 'msg': 'Heartbeat from Raspberry Pi'}
-            ws.send(json.dumps(data))
-            time.sleep(10)  # Example: send data every 10 seconds
-    Thread(target=run).start()
+@sio.event
+def disconnect():
+    print("Disconnected from the server.")
 
-if __name__ == "__main__":
-    websocket.enableTrace(True)
-    ws_app = websocket.WebSocketApp("wss://coinpusheronline.root-dynamics.com",
-                                    on_message=on_message,
-                                    on_error=on_error,
-                                    on_close=on_close,
-                                    on_open=on_open)
-    ws_app.run_forever(origin="testing_websockets.com")
+# Connect to the Flask-SocketIO server
+try:
+    sio.connect('http://coinpusheronline.root-dynamics.com')
+    sio.wait()
+except socketio.exceptions.ConnectionError as e:
+    print("Connection failed:", e)
