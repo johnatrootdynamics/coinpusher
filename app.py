@@ -104,8 +104,8 @@ def handle_disconnect():
 @socketio.on('update_machine')
 def handle_update_machine(data):
     print("Client sent machine update")
-    sys.stdout.write('got update_machine message  ')
-    os.write(1, b'got update_machine message ')
+    sys.stdout.write('got update_machine message123  ')
+    os.write(1, b'got update_machine message456 ')
     print(data)
     if data:
         socketio.send(f"rsssssssssssssssssssssssssssseceived {data}")
