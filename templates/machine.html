@@ -10,7 +10,16 @@
 <body>
     <div class="container">
         <h1>Machine: {{ machine[0].name }}</h1>
-        <div>Status: {{ machine[0].status }}</div>
+        <div>Status: {{ machine[0].machine_status }}</div>
+        <div> 
+            {% if machine['machine_status'] == 1 %}
+            <span style="color: green;">Active</span>
+            {% elif machine['machine_status'] == 2 %}
+            <span style="color: orange;">Maintenance</span>
+            {% else %}
+            <span style="color: red;">Offline</span>
+            {% endif %}
+        </div>
         <button id="connect" onclick="connectWebSocket()">Connect</button>
     </div>
 
