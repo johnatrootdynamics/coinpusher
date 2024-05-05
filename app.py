@@ -36,7 +36,7 @@ def list_machines():
 def machine_page(machine_id):
     try:
         cursor = mysql.connection.cursor()
-        cursor.execute("SELECT name, location, machine_status FROM machines WHERE id='1'", machine_id)
+        cursor.execute("SELECT name, location, machine_status FROM machines WHERE id=%s", int(machine_id))
         machine = cursor.fetchall()  # Fetch all results
         if not machine:
             return "Machine not found", 404
