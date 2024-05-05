@@ -20,7 +20,7 @@ def update_machine_info():
 
 @sio.event
 def status_updated(data):
-    print("DB updated" {data})
+    print("DB updated" + data)
 
 @sio.event
 def disconnect():
