@@ -24,7 +24,7 @@ def on_open(ws):
 
 if __name__ == "__main__":
     websocket.enableTrace(True)
-    ws_app = websocket.WebSocketApp("wss://coinpusheronline.root-dynamics.com", origin="",
+    ws_app = websocket.WebSocketApp("wss://coinpusheronline.root-dynamics.com",
                                     on_message=on_message,
                                     on_error=on_error,
                                     on_close=on_close,
