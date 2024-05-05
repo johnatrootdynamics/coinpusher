@@ -2,7 +2,7 @@
 from flask import Flask, render_template, jsonify
 from flask_mysqldb import MySQL
 from MySQLdb.cursors import DictCursor
-from flask_socketio import SocketIO, join_room, leave_room
+from flask_socketio import SocketIO, join_room, leave_room, emit
 import os
 dbuser = os.getenv('DBUSER', 'none')
 dbpasswd = os.getenv('DBPASSWD', 'none')
@@ -50,18 +50,45 @@ def machine_page(machine_id):
 
 
 @socketio.on('connect')
-def handle_connect():
+def handle_connect(data):
     print("Client connected")
-
-@socketio.on('join')
-def on_join(data):
+    cursor = mysql.connection.cursor()
     machine_id = data['machine_id']
-    join_room(machine_id)
-    socketio.emit('update', {'message': f'Connected to machine {machine_id}'}, room=machine_id)
+    new_status = data['new_status']
 
-@socketio.on('disconnect')
-def handle_disconnect():
-    print("Client disconnected")
+    #Update Machines Status in SQL Based on Machine ID
+    try:
+        cursor.execute("UPDATE machines SET machine_status=%s WHERE id=%s" (new_status, machine_id,))
+        cursor.commit()
+        emit('status_updated', {'machine_id': machine_id, 'new_status': new_status}, broadcast=True)
+    except mysql.Error as e:
+        emit('error', {'message': 'Database error: ' + str(e)})
+    finally:
+        cursor.close()
+
+@socketio.on('update_machine_status')
+def handle_update_status(data):
+    cursor = mysql.connection.cursor()
+    
+    machine_id = data['machine_id']
+    new_status = data['new_status']
+    
+    # Updating the machine's status in the database
+    sql_update_query = """
+    UPDATE machines
+    SET status = %s
+    WHERE id = %s
+    """
+    try:
+        cursor.execute(sql_update_query, (new_status, machine_id))
+        conn.commit()
+        emit('status_updated', {'machine_id': machine_id, 'new_status': new_status}, broadcast=True)
+    except MySQLdb.Error as e:
+        emit('error', {'message': 'Database error: ' + str(e)})
+    finally:
+        cursor.close()
+        conn.close()
+
 
 
 
