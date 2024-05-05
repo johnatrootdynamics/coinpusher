@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, session
 from flask_mysqldb import MySQL
 from MySQLdb.cursors import DictCursor
 from flask_socketio import SocketIO, join_room, leave_room, emit
@@ -58,6 +58,19 @@ def machine_page(machine_id):
 
 
 
+
+
+
+@socketio.on('connect')
+def handle_connect():
+    print("Client connected")
+    # Assuming client sends their identifier as part of the connection request
+
+
+@socketio.on('session_data')
+def session_data(data):
+    session['machine_id'] = data['machine_id']
+
 @socketio.on('message')
 def handle_message(data):
     print(f"Received message: {data}")
@@ -73,10 +86,10 @@ def handle_myevent(data):
 @socketio.on('disconnect')
 def handle_disconnect():
     print("Disconnected")
-    
+
 
 @socketio.on('update_machine')
-def handle_connect(data):
+def handle_update_machine(data):
     print("Client sent machine update")
     sys.stdout.write('got update_machine message  ')
     os.write(1, b'got update_machine message ')

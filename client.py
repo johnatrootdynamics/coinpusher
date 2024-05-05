@@ -8,7 +8,7 @@ sio = socketio.Client(logger=True, engineio_logger=True)  # Logging is optional 
 @sio.event
 def connect():
     print("Connected to the server.")
-    sio.emit('my event', {'data': 'Client connected'})  # Example of sending data to the server
+    sio.emit('session_data', {'machine_id':'1'})  # Example of sending data to the server
 
 @sio.event
 def message(data):
