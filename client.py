@@ -29,4 +29,4 @@ if __name__ == "__main__":
                                     on_error=on_error,
                                     on_close=on_close,
                                     on_open=on_open)
-    ws_app.run_forever()
+    ws_app.run_forever(Origin='192.168.1.1')
