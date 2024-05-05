@@ -24,9 +24,9 @@ def on_open(ws):
 
 if __name__ == "__main__":
     websocket.enableTrace(True)
-    ws_app = websocket.WebSocketApp("wss://coinpusheronline.root-dynamics.com", origin="client1",
+    ws_app = websocket.WebSocketApp("wss://coinpusheronline.root-dynamics.com", origin="",
                                     on_message=on_message,
                                     on_error=on_error,
                                     on_close=on_close,
                                     on_open=on_open)
-    ws_app.run_forever()
+    ws_app.run_forever(sslopt={"cert_reqs": websocket.ssl.CERT_NONE})
