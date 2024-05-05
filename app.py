@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO, emit
 import os
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config['dbuser'] = os.environ['db_user']
@@ -28,7 +29,7 @@ class Machine(db.Model):
     coins_left = db.Column(db.Integer, nullable=False)
     machine_status = db.Column(db.Integer, nullable=False, default=1)  # Assuming '1' is active
 
-from werkzeug.security import generate_password_hash, check_password_hash
+
 
 @app.route('/register', methods=['POST'])
 def register():

@@ -14,6 +14,8 @@ ADD https://www.google.com /time.now
 RUN git clone https://github.com/johnatrootdynamics/coinpusher /app
 WORKDIR /app
 ENV VIRTUAL_ENV=/opt/venv
+ENV db_user=blank
+ENV db_passwd=blank
 COPY * /opt/venv/
 RUN python3 -m venv $VIRTUAL_ENV
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
