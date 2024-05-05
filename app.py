@@ -73,7 +73,8 @@ def handle_connect():
 def session_data(data):
     ndata = data['machine_id']
     socketio.send("_____________GOT SESSION DATA______________")
-    os.write(1, ndata)
+    as_bytes = bytes(ndata, 'utf8')
+    os.write(1, as_bytes)
 
 @socketio.on('message')
 def handle_message(data):
