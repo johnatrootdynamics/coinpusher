@@ -55,12 +55,12 @@ def machine_page(machine_id):
 
 
 
-@socketio.on('message', namespace='/test')
+@socketio.on('message', namespace='/')
 def handle_message(data):
     print(f"Received message: {data}")
     socketio.send("Message received")
 
-@socketio.on('connect', namespace='/test')
+@socketio.on('connect', namespace='/')
 def handle_connect(data):
     print("Client connected")
     cursor = mysql.connection.cursor()
@@ -77,7 +77,7 @@ def handle_connect(data):
     finally:
         cursor.close()
 
-@socketio.on('update_machine_status', namespace='/test')
+@socketio.on('update_machine_status', namespace='/')
 def handle_update_status(data):
     cursor = mysql.connection.cursor()
     
