@@ -84,19 +84,20 @@ def handle_connect(data):
         socketio.send(f"rsssssssssssssssssssssssssssseceived {data}")
         socketio.send(data['machine_id'])
         socketio.send(data['machine_status'])
-    # cursor = mysql.connection.cursor()
-    # machine_id = data['machine_id']
-    # new_status = data['new_status']
+    cursor = mysql.connection.cursor()
+    machine_id = data['machine_id']
+    new_status = data['machine_status']
 
-    # #Update Machines Status in SQL Based on Machine ID
-    # try:
-    #     cursor.execute("UPDATE machines SET machine_status=%s WHERE id=%s" (new_status, machine_id,))
-    #     cursor.commit()
-    #     emit('status_updated', {'machine_id': machine_id, 'new_status': new_status}, broadcast=True)
-    # except mysql.Error as e:
-    #     emit('error', {'message': 'Database error: ' + str(e)})
-    # finally:
-    #     cursor.close()
+    #Update Machines Status in SQL Based on Machine ID
+    try:
+        cursor.execute("UPDATE machines SET machine_status=%s WHERE id=%s" (new_status, machine_id,))
+        cursor.commit()
+        emit('status_updated', {'machine_id': machine_id, 'new_status': new_status}, broadcast=True)
+        socketio.send("Updated machien status")
+    except mysql.Error as e:
+        emit('error', {'message': 'Database error: ' + str(e)})
+    finally:
+        cursor.close()
 
 # @socketio.on('update_machine_status')
 # def handle_update_status(data):
