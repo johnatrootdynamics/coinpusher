@@ -89,7 +89,7 @@ def handle_myevent(data):
 @socketio.on('disconnect')
 def handle_disconnect():
     cursor = mysql.connection.cursor()
-    machine_id = session_data.session['machine_id']
+    machine_id = '1'
 
     #Update Machines Status in SQL Based on Machine ID
     try:
