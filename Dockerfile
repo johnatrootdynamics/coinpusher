@@ -2,10 +2,10 @@
 FROM python:3.11.2
 EXPOSE 80
 ENV TZ="America/New_York"
-ARG db_user=${db_user}
-ARG db_passwd=${db_passwd}
-ENV db_user=${db_user}
-ENV db_passwd=${db_passwd}
+ARG DBUSER=${DBUSER}
+ARG DBPASSWD=${DBPASSWD}
+ENV DBUSER=${DBUSER}
+ENV DBPASSWD=${DBPASS}
 # Install Git
 RUN apt update  -y
 RUN apt install python3-venv -y
