@@ -94,7 +94,7 @@ def handle_connect(data):
         cursor.commit()
         emit('status_updated', {'machine_id': machine_id, 'new_status': new_status}, broadcast=True)
         socketio.send("Updated machien status")
-    except mysql.Error as e:
+    except cursor.Error as e:
         emit('error', {'message': 'Database error: ' + str(e)})
     finally:
         cursor.close()
