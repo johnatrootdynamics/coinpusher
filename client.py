@@ -1,4 +1,5 @@
 import socketio
+import time
 
 # Create a Socket.IO client instance
 sio = socketio.Client(logger=True, engineio_logger=True)  # Logging is optional but helpful for debugging
@@ -20,7 +21,7 @@ def disconnect():
 # Connect to the Flask-SocketIO server
 try:
     sio.connect('http://coinpusheronline.root-dynamics.com')
-    sio.wait()
+    time.sleep(5)
     sio.disconnect()
 except socketio.exceptions.ConnectionError as e:
     print("Connection failed:", e)
