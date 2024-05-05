@@ -32,7 +32,7 @@ def list_machines():
     finally:
         cursor.close()
 
-@app.route('/machine/<machine_id>')
+@app.route('/machine/<int:machine_id>')
 def machine_page(machine_id):
     try:
         cursor = mysql.connection.cursor()
