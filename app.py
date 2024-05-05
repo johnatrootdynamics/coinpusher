@@ -90,7 +90,7 @@ def handle_connect(data):
 
     #Update Machines Status in SQL Based on Machine ID
     try:
-        cursor.execute("UPDATE machines SET machine_status=%s WHERE id=%s" (new_status, machine_id,))
+        cursor.execute("UPDATE machines SET machine_status=%s WHERE id=%s" (int(new_status), int(machine_id)))
         cursor.commit()
         emit('status_updated', {'machine_id': machine_id, 'new_status': new_status}, broadcast=True)
         socketio.send("Updated machien status")
