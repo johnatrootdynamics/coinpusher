@@ -4,6 +4,9 @@ from flask_mysqldb import MySQL
 from MySQLdb.cursors import DictCursor
 from flask_socketio import SocketIO, join_room, leave_room, emit
 import os
+import logging
+import sys
+
 dbuser = os.getenv('DBUSER', 'none')
 dbpasswd = os.getenv('DBPASSWD', 'none')
 dbhost = os.getenv('DBHOST', 'none')
@@ -59,6 +62,8 @@ def machine_page(machine_id):
 def handle_message(data):
     print(f"Received message: {data}")
     socketio.send("Message received")
+    sys.stdout.write('got message  ')
+    os.write(1, b'got message  ')
 
 @socketio.on('my event')
 def handle_myevent(data):
@@ -72,6 +77,8 @@ def handle_disconnect():
 @socketio.on('update_machine')
 def handle_connect(data):
     print("Client sent machine update")
+    sys.stdout.write('got update_machine message  ')
+    os.write(1, b'got update_machine message ')
     print(data)
     if data:
         socketio.send(f"received {data}")
