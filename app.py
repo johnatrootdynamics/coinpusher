@@ -96,6 +96,7 @@ def handle_connect(data):
     except cursor.Error as e:
         emit('error', {'message': 'Database error: ' + str(e)})
     finally:
+        mysql.connection.commit()
         cursor.close()
 
 # @socketio.on('update_machine_status')
