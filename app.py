@@ -63,41 +63,41 @@ def handle_message(data):
 @socketio.on('connect')
 def handle_connect(data):
     print("Client connected")
-    cursor = mysql.connection.cursor()
-    machine_id = data['machine_id']
-    new_status = data['new_status']
+    # cursor = mysql.connection.cursor()
+    # machine_id = data['machine_id']
+    # new_status = data['new_status']
 
-    #Update Machines Status in SQL Based on Machine ID
-    try:
-        cursor.execute("UPDATE machines SET machine_status=%s WHERE id=%s" (new_status, machine_id,))
-        cursor.commit()
-        emit('status_updated', {'machine_id': machine_id, 'new_status': new_status}, broadcast=True)
-    except mysql.Error as e:
-        emit('error', {'message': 'Database error: ' + str(e)})
-    finally:
-        cursor.close()
+    # #Update Machines Status in SQL Based on Machine ID
+    # try:
+    #     cursor.execute("UPDATE machines SET machine_status=%s WHERE id=%s" (new_status, machine_id,))
+    #     cursor.commit()
+    #     emit('status_updated', {'machine_id': machine_id, 'new_status': new_status}, broadcast=True)
+    # except mysql.Error as e:
+    #     emit('error', {'message': 'Database error: ' + str(e)})
+    # finally:
+    #     cursor.close()
 
-@socketio.on('update_machine_status')
-def handle_update_status(data):
-    cursor = mysql.connection.cursor()
+# @socketio.on('update_machine_status')
+# def handle_update_status(data):
+#     cursor = mysql.connection.cursor()
     
-    machine_id = data['machine_id']
-    new_status = data['new_status']
+#     machine_id = data['machine_id']
+#     new_status = data['new_status']
     
-    # Updating the machine's status in the database
-    sql_update_query = """
-    UPDATE machines
-    SET status = %s
-    WHERE id = %s
-    """
-    try:
-        cursor.execute(sql_update_query, (new_status, machine_id))
-        cursor.commit()
-        emit('status_updated', {'machine_id': machine_id, 'new_status': new_status}, broadcast=True)
-    except MySQLdb.Error as e:
-        emit('error', {'message': 'Database error: ' + str(e)})
-    finally:
-        cursor.close()
+#     # Updating the machine's status in the database
+#     sql_update_query = """
+#     UPDATE machines
+#     SET status = %s
+#     WHERE id = %s
+#     """
+#     try:
+#         cursor.execute(sql_update_query, (new_status, machine_id))
+#         cursor.commit()
+#         emit('status_updated', {'machine_id': machine_id, 'new_status': new_status}, broadcast=True)
+#     except MySQLdb.Error as e:
+#         emit('error', {'message': 'Database error: ' + str(e)})
+#     finally:
+#         cursor.close()
 
 
 
