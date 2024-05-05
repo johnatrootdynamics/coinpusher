@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ machine.name }}</title>
+    <!-- Include Bootstrap CSS for styling -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Machine: {{ machine.name }}</h1>
+        <div>Status: {{ machine.status }}</div>
+        <div>Location: {{ machine.location }}</div>
+        <button id="connect" onclick="connectWebSocket()">Connect</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script>
+        var socket;
+
+        function connectWebSocket() {
+            socket = io.connect('http://' + document.domain + ':' + location.port);
+            
+            socket.on('connect', function() {
+                socket.emit('join', {machine_id: '{{ machine.id }}'});
+            });
+
+            socket.on('update', function(data) {
+                console.log('Update received:', data);
+            });
+        }
+    </script>
+</body>
+</html>
