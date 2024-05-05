@@ -31,7 +31,7 @@ try:
     sio.connect('http://coinpusheronline.root-dynamics.com')
     time.sleep(2)
     update_machine_info()
-    time.sleep(2)
+    time.sleep(5)
     sio.disconnect()
 except socketio.exceptions.ConnectionError as e:
     print("Connection failed:", e)
