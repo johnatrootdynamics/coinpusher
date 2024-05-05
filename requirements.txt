@@ -3,3 +3,4 @@ flask-sqlalchemy
 flask-socketio
 Werkzeug
 Flask-MySQLdb
+mysqlclient

@@ -1,81 +1,35 @@
-from flask import Flask, request, jsonify, render_template
-from flask_sqlalchemy import SQLAlchemy
-from flask_socketio import SocketIO, emit
+
+from flask import Flask, render_template, jsonify
+import MySQLdb
 import os
-from werkzeug.security import generate_password_hash, check_password_hash
-
-app = Flask(__name__)
 dbuser = os.getenv('DBUSER', 'none')
-dbpass = os.getenv('DBPASSWD', 'none')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{user}:{passwd}@coinpusher-db.root-dynamics.com/coin'.format(
-    user=dbuser, passwd=dbuser)
-app.config['SECRET_KEY'] = 'your_secret_key'
-
-db = SQLAlchemy(app)
-socketio = SocketIO(app)
+dbpasswd = os.getenv('DBPASSWD', 'none')
+app = Flask(__name__)
 
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password = db.Column(db.String(200), nullable=False)
-    plays = db.Column(db.Integer, default=0)
-    tickets_won = db.Column(db.Integer, default=0)
+app.config['MYSQL_HOST'] = 'coinpusher-db.root-dynamics.com'
+app.config['MYSQL_USER'] = $dbuser
+app.config['MYSQL_PASSWORD'] = $dbpasswd
+app.config['MYSQL_DB'] = 'coin'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
-class Machine(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    location = db.Column(db.String(100), nullable=False)
-    coins_left = db.Column(db.Integer, nullable=False)
-    machine_status = db.Column(db.Integer, nullable=False, default=1)  # Assuming '1' is active
+def get_db_connection():
+    conn = MySQLdb.connect(app)
+    return conn
 
-
-
-@app.route('/register', methods=['POST'])
-def register():
-    username = request.json['username']
-    password = request.json['password']
-    hashed_password = generate_password_hash(password)
-    new_user = User(username=username, password=hashed_password)
-    db.session.add(new_user)
-    db.session.commit()
-    return jsonify({"message": "User registered successfully!"}), 201
-
-@app.route('/login', methods=['POST'])
-def login():
-    username = request.json['username']
-    password = request.json['password']
-    user = User.query.filter_by(username=username).first()
-    if user and check_password_hash(user.password, password):
-        return jsonify({"message": "Login successful!"}), 200
-    return jsonify({"message": "Invalid credentials"}), 401
-
-
-
-@app.route('/machines', methods=['GET'])
+@app.route('/machines')
 def list_machines():
+    conn = get_db_connection()
+    cursor = conn.cursor(MySQLdb.cursors.DictCursor)  # Use DictCursor to get results as dictionaries
     try:
-        # Query all machines
-        machines = Machine.query.all()
-        # Serialize the data for JSON output
-        machines_list = [{
-            'id': machine.id,
-            'location': machine.location,
-            'coins_left': machine.coins_left,
-            'status': machine.machine_status
-        } for machine in machines]
-
+        cursor.execute("SELECT id, location, coins_left, machine_status FROM machines")
+        machines = cursor.fetchall()  # Fetch all results
         return render_template('machines.html', machines=machines)
     except Exception as e:
-        return str(e)  # For debugging, in production handle errors appropriately
-
-
-
-
-
-
-
-
+        return jsonify({"error": str(e)}), 500
+    finally:
+        cursor.close()
+        conn.close()
 
 if __name__ == '__main__':
-    socketio.run(app(debug=True, allow_unsafe_werkzeug=True))
+    app.run(debug=True)
