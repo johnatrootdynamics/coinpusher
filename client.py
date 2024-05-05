@@ -52,7 +52,6 @@ try:
     time.sleep(2)
     update_machine_info()
     sio.wait()
-    sio.disconnect()
     signal.signal(signal.SIGINT, signal_handler)
     sio.wait()
 except socketio.exceptions.ConnectionError as e:
