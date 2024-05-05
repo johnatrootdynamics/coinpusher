@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 app.config['MYSQL_HOST'] = 'coinpusher-db.root-dynamics.com'
 app.config['MYSQL_USER'] = dbuser
-app.config['MYSQL_PASSWORD'] = 'Coinpassword123'
+app.config['MYSQL_PASSWORD'] = 'coinpassword123123'
 app.config['MYSQL_DB'] = 'coin'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
