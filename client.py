@@ -13,9 +13,11 @@ def connect():
 @sio.event
 def message(data):
     print('Received data:', data)
+
 @sio.event
-def update_machine():
-    sio.emit('update_machine', {'data': {'machine_id': '1', 'machine_status': '2'}})
+def update_machine_info():
+    sio.emit('update_machine', {'machine_id': '1', 'machine_status': '2'})
+
 @sio.event
 def disconnect():
     print("Disconnected from the server.")
@@ -24,7 +26,7 @@ def disconnect():
 try:
     sio.connect('http://coinpusheronline.root-dynamics.com')
     time.sleep(2)
-    sio.update_machine()
+    update_machine_info()
     sio.disconnect()
 except socketio.exceptions.ConnectionError as e:
     print("Connection failed:", e)
