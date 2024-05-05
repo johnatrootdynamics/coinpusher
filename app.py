@@ -5,8 +5,8 @@ import os
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-dbuser = os.getenv['DBUSER']
-dbpass = os.getenv['DBPASSWD']
+dbuser = os.getenv('DBUSER', 'none')
+dbpass = os.getenv('DBPASSWD', 'none')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://{user}:{passwd}@coinpusher-db.root-dynamics.com/coin'.format(
     user=dbuser, passwd=dbuser)
 app.config['SECRET_KEY'] = 'your_secret_key'
