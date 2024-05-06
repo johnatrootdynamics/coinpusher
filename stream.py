@@ -2,7 +2,7 @@ import io
 import socket
 import struct
 import time
-import PiCamera
+import picamera
 import argparse
 import logging
 
