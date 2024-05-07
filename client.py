@@ -108,11 +108,10 @@ try:
     signal.signal(signal.SIGINT, signal_handler)
     time.sleep(2)
     update_machine_info()
-    time.sleep(2)
+    time.sleep(5)
     # joinroom()
     time.sleep(10)
     update_machine_info2()
-    joinroom()
     sio.wait()
 except socketio.exceptions.ConnectionError as e:
     print("Failed to connect to the server:", e)
