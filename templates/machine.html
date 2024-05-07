@@ -15,18 +15,16 @@
             });
 
             // Function to send an action when buttons are clicked
-            function sendAction(action) {
-                console.log('Action:', action);
-                socket.emit('button_push', { machine_id: "1", action: action });
-            }
+        document.getElementById('leftButton').addEventListener('click', function() {
+        socket.emit('button_push', { machine_id: "1", action: "left" });
+        console.log('Left button clicked');
+        });
 
-            // Adding click event listeners to buttons
-            document.getElementById('leftButton').addEventListener('click', function() {
-                sendAction('left');
-            });
-            document.getElementById('rightButton').addEventListener('click', function() {
-                sendAction('right');
-            });
+        document.getElementById('rightButton').addEventListener('click', function() {
+        socket.emit('button_push', { machine_id: "1", action: "right" });
+        console.log('Right button clicked');
+        });
+});
 
             // Handle status updates received from the server
             socket.on('status_updated', function(data) {
