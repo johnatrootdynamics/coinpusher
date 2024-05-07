@@ -110,7 +110,7 @@ def handle_disconnect():
 
 @socketio.on('button_push')
 def handle_button_push(data):
-    emit('button_push', { "machine_id": "1", "action": "left" },broadcast=True)
+    emit('button_push', data ,broadcast=True)
     os.write(1, b'got button_push from webclient ')
 @socketio.on('update_machine')
 def handle_update_machine(data):

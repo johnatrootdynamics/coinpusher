@@ -62,7 +62,19 @@ def update_machine_info2():
 
 @sio.event
 def button_push(data):
-    print(data)
+    LR = data['action']
+    if (LR == "left"):
+        GPIO.setup("23", GPIO.OUT)
+        GPIO.output("23", GPIO.HIGH)
+        time.sleep(.1)
+        GPIO.output("23", GPIO.LOW)
+        print("left button pushed")
+    if (LR == "right"):
+        GPIO.setup("24", GPIO.OUT)
+        GPIO.output("24", GPIO.HIGH)
+        time.sleep(.1)
+        GPIO.output("24", GPIO.LOW)
+        print("right Button pushed")
 
 @sio.event
 def status_updated(data):
@@ -97,7 +109,7 @@ try:
     time.sleep(2)
     update_machine_info()
     time.sleep(2)
-    #joinroom()
+    # joinroom()
     time.sleep(10)
     update_machine_info2()
     joinroom()
