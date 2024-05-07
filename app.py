@@ -105,6 +105,10 @@ def handle_disconnect():
         cursor.close()
     print("Disconnected")
 
+@socketio.on('button_push')
+def handle_button_push(data):
+    emit('button_push', { "machine_id": "1", "action": "left" })
+    emit
 
 @socketio.on('update_machine')
 def handle_update_machine(data):
