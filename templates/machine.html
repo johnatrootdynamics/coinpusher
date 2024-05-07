@@ -44,7 +44,7 @@
             // Function to send action data when buttons are clicked
             function sendAction(action) {
                 console.log('Sending action:', action);
-                socket.emit('action', { machine_id: {{ machine_id }}, action: action });
+                socket.emit('buton_push', { machine_id: {{ machine_id }}, action: action });
             }
 
             // Event listeners for buttons

@@ -2,6 +2,40 @@ import socketio
 import time
 import signal
 import sys
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)  # Use BCM GPIO numbering
+GPIO.setwarnings(False)
+
+
+
+def turn_off_gpio(pin):
+
+    # Set up the pin as an output
+    GPIO.setup(pin, GPIO.OUT)
+    
+    # Set the pin to LOW
+    GPIO.output(pin, GPIO.LOW)
+    print(f"GPIO {pin} set to LOW")
+
+
+def button_push(LR):
+    if (LR == "left"):
+        GPIO.setup("23", GPIO.OUT)
+        GPIO.output("23", GPIO.HIGH)
+        time.sleep(.1)
+        GPIO.output("23", GPIO.LOW)
+    if (LR == "right"):
+        GPIO.setup("24", GPIO.OUT)
+        GPIO.output("24", GPIO.HIGH)
+        time.sleep(.1)
+        GPIO.output("24", GPIO.LOW)
+
+
+
+
+
+
+
 
 # Create a Socket.IO client instance
 sio = socketio.Client(logger=True, engineio_logger=True)  # Logging is optional but helpful for debugging
@@ -19,6 +53,10 @@ def message(data):
 @sio.event
 def update_machine_info():
     sio.emit('update_machine', {'machine_id': '1', 'machine_status': '1'})
+
+@sio.event
+def button_push(data):
+    print(data)
 
 @sio.event
 def status_updated(data):
