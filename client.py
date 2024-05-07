@@ -110,8 +110,6 @@ try:
     update_machine_info()
     time.sleep(5)
     # joinroom()
-    time.sleep(10)
-    update_machine_info2()
     sio.wait()
 except socketio.exceptions.ConnectionError as e:
     print("Failed to connect to the server:", e)
