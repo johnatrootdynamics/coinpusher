@@ -16,12 +16,12 @@
 
             // Function to send an action when buttons are clicked
         document.getElementById('leftButton').addEventListener('click', function() {
-        socket.emit('button_push', { machine_id: "1", action: "left" });
+        socket.emit('button_push', { machine_id: "1", action: "left" }, broadcast=True);
         console.log('Left button clicked');
         });
 
         document.getElementById('rightButton').addEventListener('click', function() {
-        socket.emit('button_push', { machine_id: "1", action: "right" });
+        socket.emit('button_push', { machine_id: "1", action: "right" }, broadcast=True);
         console.log('Right button clicked');
         });
 

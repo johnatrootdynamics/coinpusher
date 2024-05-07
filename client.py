@@ -97,7 +97,7 @@ try:
     time.sleep(2)
     update_machine_info()
     time.sleep(2)
-    joinroom()
+    #joinroom()
     time.sleep(10)
     update_machine_info2()
     joinroom()
