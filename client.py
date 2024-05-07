@@ -64,16 +64,16 @@ def update_machine_info2():
 def button_push(data):
     LR = data['action']
     if (LR == "left"):
-        GPIO.setup("23", GPIO.OUT)
-        GPIO.output("23", GPIO.HIGH)
+        GPIO.setup(23, GPIO.OUT)
+        GPIO.output(23, GPIO.HIGH)
         time.sleep(.1)
-        GPIO.output("23", GPIO.LOW)
+        GPIO.output(23, GPIO.LOW)
         print("left button pushed")
     if (LR == "right"):
-        GPIO.setup("24", GPIO.OUT)
-        GPIO.output("24", GPIO.HIGH)
+        GPIO.setup(24, GPIO.OUT)
+        GPIO.output(24, GPIO.HIGH)
         time.sleep(.1)
-        GPIO.output("24", GPIO.LOW)
+        GPIO.output(24, GPIO.LOW)
         print("right Button pushed")
 
 @sio.event
