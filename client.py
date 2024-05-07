@@ -55,7 +55,7 @@ def message(data):
 
 @sio.event
 def update_machine_info():
-    sio.emit('update_machine', {'machine_id': '1', 'machine_status': '1'}, broadcast=True)
+    sio.emit('update_machine', {'machine_id': '1', 'machine_status': '1'})
 @sio.event
 def update_machine_info2():
     sio.emit('update_machine', {'machine_id': '1', 'machine_status': '3'})
