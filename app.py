@@ -70,7 +70,7 @@ def handle_connect():
 
 @socketio.event
 def joinroom(sid):
-    socketio.enter_room(sid, 'Machine 1')
+    socketio.enter_room(sid, 'clients')
 
 @socketio.on('session_data')
 def session_data(data):

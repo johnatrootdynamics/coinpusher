@@ -37,7 +37,7 @@ def button_push(LR):
 
 
 def joinroom():
-    sio.emit('join_room', {'1'})
+    sio.emit('join_room', {'machine_id': '1'})
 
 # Create a Socket.IO client instance
 sio = socketio.Client(logger=True, engineio_logger=True)  # Logging is optional but helpful for debugging
