@@ -106,7 +106,7 @@ def handle_disconnect():
     # finally:
     #     mysql.connection.commit()
     #     cursor.close()
-    # print("Disconnected")
+     print("Disconnected")
 
 @socketio.on('button_push')
 def handle_button_push(data):
