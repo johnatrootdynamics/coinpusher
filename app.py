@@ -112,6 +112,7 @@ def handle_disconnect():
 def handle_button_push(data):
     emit('button_push', data ,broadcast=True)
     os.write(1, b'got button_push from webclient ')
+    
 @socketio.on('update_machine')
 def handle_update_machine(data):
     print("Client sent machine update")
