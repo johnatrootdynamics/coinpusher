@@ -53,6 +53,9 @@ def message(data):
 @sio.event
 def update_machine_info():
     sio.emit('update_machine', {'machine_id': '1', 'machine_status': '1'})
+@sio.event
+def update_machine_info2():
+    sio.emit('update_machine', {'machine_id': '1', 'machine_status': '3'})
 
 @sio.event
 def button_push(data):
@@ -90,7 +93,8 @@ try:
     signal.signal(signal.SIGINT, signal_handler)
     time.sleep(2)
     update_machine_info()
-    time.sleep(30)
+    time.sleep(10)
+    update_machine_info2()
     sio.wait()
 except socketio.exceptions.ConnectionError as e:
     print("Failed to connect to the server:", e)
