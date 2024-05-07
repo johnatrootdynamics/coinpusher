@@ -68,6 +68,9 @@ def handle_connect():
     print("Client connected")
     # Assuming client sends their identifier as part of the connection request
 
+@socketio.event
+def joinroom(sid):
+    socketio.enter_room(sid, 'Machine 1')
 
 @socketio.on('session_data')
 def session_data(data):

@@ -36,6 +36,8 @@ def button_push(LR):
 
 
 
+def joinroom():
+    sio.emit('join_room', {'1'})
 
 # Create a Socket.IO client instance
 sio = socketio.Client(logger=True, engineio_logger=True)  # Logging is optional but helpful for debugging
@@ -95,6 +97,7 @@ try:
     update_machine_info()
     time.sleep(10)
     update_machine_info2()
+    joinroom()
     sio.wait()
 except socketio.exceptions.ConnectionError as e:
     print("Failed to connect to the server:", e)
