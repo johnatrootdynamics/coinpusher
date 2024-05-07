@@ -24,7 +24,6 @@
         socket.emit('button_push', { machine_id: "1", action: "right" });
         console.log('Right button clicked');
         });
-});
 
             // Handle status updates received from the server
             socket.on('status_updated', function(data) {
