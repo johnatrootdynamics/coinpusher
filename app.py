@@ -112,7 +112,7 @@ def handle_disconnect():
 def handle_button_push(data):
     emit('button_push', data ,broadcast=True)
     os.write(1, b'got button_push from webclient ')
-    
+
 @socketio.on('update_machine')
 def handle_update_machine(data):
     print("Client sent machine update")
@@ -120,7 +120,7 @@ def handle_update_machine(data):
     os.write(1, b'got update_machine message456 ')
     print(data)
     if data:
-        socketio.send(f"rsssssssssssssssssssssssssssseceived {data}", broadcast=True)
+        socketio.send(f"rsssssssssssssssssssssssssssseceived {data}")
         socketio.send(data['machine_id'])
         socketio.send(data['machine_status'])
     cursor = mysql.connection.cursor()
