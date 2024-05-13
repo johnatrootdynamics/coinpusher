@@ -26,6 +26,9 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 
 
@@ -34,15 +37,15 @@ class User(UserMixin):
         self.id = id
         self.username = username
 
-# @LoginManager.user_loader
-# def load_user(user_id):
-#     cursor = mysql.connection.cursor()
-#     cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
-#     user = cursor.fetchone()
-#     cursor.close()
-#     if user:
-#         return User(id=user['id'], username=user['username'])
-#     return None       
+@login_manager.user_loader
+def load_user(user_id):
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+    user = cursor.fetchone()
+    cursor.close()
+    if user:
+        return User(id=user['id'], username=user['username'])
+    return None       
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
