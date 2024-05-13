@@ -1,9 +1,11 @@
 
-from flask import Flask, render_template, jsonify, session
+from flask import Flask, render_template, jsonify, session, request
 from flask_mysqldb import MySQL
 from MySQLdb.cursors import DictCursor
 from flask_socketio import SocketIO, join_room, leave_room, emit
 from flask_session import Session
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import logging
 import sys
@@ -24,6 +26,84 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
+
+
+
+class User(UserMixin):
+    def __init__(self, id, username):
+        self.id = id
+        self.username = username
+
+@login_manager.user_loader
+def load_user(user_id):
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+    user = cursor.fetchone()
+    cursor.close()
+    if user:
+        return User(id=user['id'], username=user['username'])
+    return None       
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        bucket = 'pushers'
+        # Get form data
+        email = request.form['email']
+        username = request.form['username']
+        password = request.form['password']
+        hashed_password = generate_password_hash(password, method='scrypt')
+
+        # if 'picture' in request.files:
+        #     picture = request.files['picture']
+        # # If the user does not select a file, the browser submits an
+        # # empty file without a filename.
+        #     if picture.filename != "":
+        #         picture = request.files['picture']
+        #         if picture and allowed_file(picture.filename):
+        #             filename = secure_filename(picture.filename)
+        #             size = os.fstat(picture.fileno()).st_size
+        #             picture_path = MINIO_API_HOST + '/drivers/' + filename
+        #             upload_object(filename, picture, size, bucket)
+        #         else:
+        #             flash('Invalid File Type','danger')
+        #             picture_path = 'firstnone'
+        #     else:
+        #         picture_path = 'secondnone'
+        # else: picture_path = 'thirdone'
+
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO users (email, username, password) VALUES (%s, %s, %s)",
+        (email ,username, hashed_password))
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('login'))
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        cursor = mysql.connection.cursor()
+        cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
+        user = cursor.fetchone()
+        cursor.close()
+
+        if user and check_password_hash(user['password'], password):
+            user_obj = User(id=user['id'], username=user['username'])
+            login_user(user_obj)
+            return redirect(url_for('index'))
+        else:
+            flash('Invalid username or password')
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
 
 
 @app.route('/')
