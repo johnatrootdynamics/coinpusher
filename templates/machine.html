@@ -4,7 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Machine Control</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <style>
+        #button-container {
+            text-align: center;
+            padding: 20px;
+        }
+        .control-button {
+            margin: 10px;
+            width: 150px; /* Fixed width for the buttons */
+        }
+        #status {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 24px;
+            color: #007bff; /* Bootstrap primary blue */
+        }
+    </style>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var socket = io();
@@ -16,13 +34,13 @@
 
             // Function to send an action when buttons are clicked
             document.getElementById('leftButton').addEventListener('click', function() {
-            socket.emit('button_push', { machine_id: "1", action: "left" });
-            console.log('Left button clicked');
+                socket.emit('button_push', { machine_id: "1", action: "left" });
+                console.log('Left button clicked');
             });
 
             document.getElementById('rightButton').addEventListener('click', function() {
-            socket.emit('button_push', { machine_id: "1", action: "right" });
-            console.log('Right button clicked');
+                socket.emit('button_push', { machine_id: "1", action: "right" });
+                console.log('Right button clicked');
             });
 
             // Handle status updates received from the server
@@ -36,10 +54,15 @@
         });
     </script>
 </head>
-<body>
-    <h1>{{ machine[0].name }}}}</h1>
-    <div id="status">Current Status: Loading...</div>
-    <button id="leftButton">Left</button>
-    <button id="rightButton">Right</button>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h1 class="display-4 text-center mb-4">{{ machine[0].name }}</h1>
+        <div id="status" class="alert alert-primary">Current Status: Connecting.....</div>
+        <div id="button-container">
+            <button id="leftButton" class="btn btn-lg btn-primary control-button">Left</button>
+            <button id="rightButton" class="btn btn-lg btn-primary control-button">Right</button>
+        </div>
+    </div>
 </body>
 </html>
+
