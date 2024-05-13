@@ -34,15 +34,15 @@ class User(UserMixin):
         self.id = id
         self.username = username
 
-@LoginManager.user_loader
-def load_user(user_id):
-    cursor = mysql.connection.cursor()
-    cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
-    user = cursor.fetchone()
-    cursor.close()
-    if user:
-        return User(id=user['id'], username=user['username'])
-    return None       
+# @LoginManager.user_loader
+# def load_user(user_id):
+#     cursor = mysql.connection.cursor()
+#     cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+#     user = cursor.fetchone()
+#     cursor.close()
+#     if user:
+#         return User(id=user['id'], username=user['username'])
+#     return None       
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
