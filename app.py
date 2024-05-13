@@ -34,7 +34,7 @@ class User(UserMixin):
         self.id = id
         self.username = username
 
-@login_manager.user_loader
+@LoginManager.user_loader
 def load_user(user_id):
     cursor = mysql.connection.cursor()
     cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
