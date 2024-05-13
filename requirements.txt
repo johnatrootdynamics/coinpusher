@@ -4,4 +4,4 @@ flask_session
 Werkzeug
 Flask-MySQLdb
 mysqlclient
-flask-login
+flask_login
