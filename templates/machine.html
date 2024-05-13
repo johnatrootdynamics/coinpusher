@@ -22,17 +22,36 @@
             font-size: 24px;
             color: #007bff; /* Bootstrap primary blue */
         }
+        .info-box {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 20px;
+        }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var socket = io();
 
-            // Handling the connect event
             socket.on('connect', function() {
                 console.log('Connected to the server');
             });
 
-            // Function to send an action when buttons are clicked
+            socket.on('status_updated', function(data) {
+                console.log('Status update received:', data);
+                var statusElement = document.getElementById('status');
+                if (data.machine_id === "1") {
+                    statusElement.innerHTML = 'Current Status: ' + data.new_status;
+                }
+            });
+
+            socket.on('update_tickets', function(data) {
+                document.getElementById('tickets').value = data.tickets;
+            });
+
+            socket.on('update_tokens', function(data) {
+                document.getElementById('tokens').value = data.tokens;
+            });
+
             document.getElementById('leftButton').addEventListener('click', function() {
                 socket.emit('button_push', { machine_id: "1", action: "left" });
                 console.log('Left button clicked');
@@ -42,15 +61,6 @@
                 socket.emit('button_push', { machine_id: "1", action: "right" });
                 console.log('Right button clicked');
             });
-
-            // Handle status updates received from the server
-            socket.on('status_updated', function(data) {
-                console.log('Status update received:', data);
-                var statusElement = document.getElementById('status');
-                if (data.machine_id === "1") {
-                    statusElement.innerHTML = 'Current Status: ' + data.new_status;
-                }
-            });
         });
     </script>
 </head>
@@ -58,6 +68,16 @@
     <div class="container mt-5">
         <h1 class="display-4 text-center mb-4">{{ machine[0].name }}</h1>
         <div id="status" class="alert alert-primary">Current Status: Connecting.....</div>
+
+        <div class="info-box">
+            <label for="tickets">Tickets:</label>
+            <input type="text" id="tickets" readonly class="form-control text-center">
+        </div>
+        <div class="info-box">
+            <label for="tokens">Tokens Left:</label>
+            <input type="text" id="tokens" readonly class="form-control text-center">
+        </div>
+
         <div id="button-container">
             <button id="leftButton" class="btn btn-lg btn-primary control-button">Left</button>
             <button id="rightButton" class="btn btn-lg btn-primary control-button">Right</button>
@@ -65,4 +85,4 @@
     </div>
 </body>
 </html>
-
+123
