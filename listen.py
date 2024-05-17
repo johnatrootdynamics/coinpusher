@@ -7,12 +7,14 @@ def setup_gpio():
     GPIO.setup(17, GPIO.OUT)  # Set GPIO 17 as output for the relay
 
 def main():
+    count = 0
     setup_gpio()
     try:
         while True:
             if GPIO.input(21) == GPIO.HIGH:
                 GPIO.output(17, GPIO.HIGH)  # Turn on relay
-                print("Relay ON")
+                count + 1
+                print("Relay ON" + count)
             else:
                 GPIO.output(17, GPIO.LOW)  # Turn off relay
                 print("Relay OFF")
