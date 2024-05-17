@@ -13,11 +13,11 @@ def main():
     try:
         while True:
             if GPIO.input(21) == GPIO.HIGH:
-                GPIO.output(17, GPIO.HIGH)  # Turn on relay
+                GPIO.output(5, GPIO.HIGH)  # Turn on relay
                 count += 1  # Increment count when relay is on
                 print("Relay ON, Count:", count)
                 time.sleep(.1)
-                GPIO.output(17, GPIO.LOW)
+                GPIO.output(5, GPIO.LOW)
             else:
                 if count > 0:  # Only print when there was a previous count
                     print("Final count before relay off:", count)
