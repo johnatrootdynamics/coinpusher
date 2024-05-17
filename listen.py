@@ -16,10 +16,12 @@ def main():
                 GPIO.output(17, GPIO.HIGH)  # Turn on relay
                 count += 1  # Increment count when relay is on
                 print("Relay ON, Count:", count)
+                time.sleep(.1)
+                GPIO.output(17, GPIO.LOW)
             else:
                 if count > 0:  # Only print when there was a previous count
                     print("Final count before relay off:", count)
-                GPIO.output(17, GPIO.LOW)  # Turn off relay
+                  # Turn off relay
                 count = 0  # Reset count when relay is off
                 print("Relay OFF")
             time.sleep(0.1)  # Sleep for 100 milliseconds
