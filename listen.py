@@ -13,7 +13,7 @@ def main():
         while True:
             if GPIO.input(21) == GPIO.HIGH:
                 GPIO.output(17, GPIO.HIGH)  # Turn on relay
-                count + 1
+                count ++ 1
                 print("Relay ON")
                 print(count)
             else:
