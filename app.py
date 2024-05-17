@@ -174,6 +174,11 @@ def handle_myevent(data):
     print("Sayin client is connected dawg")
     socketio.send('got "my event"')
 
+@socketio.on('update_tickets')
+def handle_myevent(data):
+    print("adding tickets")
+    socketio.send('got "more tickets"')
+
 @socketio.on('disconnect')
 def handle_disconnect():
     # cursor = mysql.connection.cursor()
