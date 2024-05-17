@@ -177,7 +177,7 @@ def handle_myevent(data):
 @socketio.on('update_tickets')
 def handle_myevent(data):
     print("adding tickets")
-    emit('update_tickets', {data}, broadcast=True)
+    emit('update_tickets', data, broadcast=True)
 
 @socketio.on('disconnect')
 def handle_disconnect():
