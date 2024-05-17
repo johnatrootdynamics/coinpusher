@@ -1,11 +1,27 @@
-from gpiozero import Button
-from signal import pause
+import RPi.GPIO as GPIO
+import time
 
-def print_tickets():
-    print("Printing tickets")
+def setup_gpio():
+    GPIO.setmode(GPIO.BCM)  # Use BCM GPIO numbering
+    GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Set GPIO 21 as input
+    GPIO.setup(17, GPIO.OUT)  # Set GPIO 17 as output for the relay
 
-button = Button(21, pull_up=False)  # Set up GPIO 7 as a button, assuming external pull-down resistor
+def main():
+    setup_gpio()
+    try:
+        while True:
+            if GPIO.input(21) == GPIO.HIGH:
+                GPIO.output(17, GPIO.HIGH)  # Turn on relay
+                print("Relay ON")
+            else:
+                GPIO.output(17, GPIO.LOW)  # Turn off relay
+                print("Relay OFF")
+            time.sleep(0.1)  # Sleep for 100 milliseconds
 
-button.when_pressed = print_tickets
+    except KeyboardInterrupt:
+        print("Program terminated by user")
+    finally:
+        GPIO.cleanup()  # Ensure GPIOs are reset on exit
 
-pause()  # This will handle the script running indefinitely
+if __name__ == "__main__":
+    main()
