@@ -14,7 +14,8 @@ def main():
             if GPIO.input(21) == GPIO.HIGH:
                 GPIO.output(17, GPIO.HIGH)  # Turn on relay
                 count + 1
-                print("Relay ON" + count)
+                print("Relay ON")
+                print(count)
             else:
                 GPIO.output(17, GPIO.LOW)  # Turn off relay
                 print("Relay OFF")
