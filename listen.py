@@ -7,17 +7,20 @@ def setup_gpio():
     GPIO.setup(17, GPIO.OUT)  # Set GPIO 17 as output for the relay
 
 def main():
-    count = 0
     setup_gpio()
+    count = 0  # Initialize the counter to 0
+
     try:
         while True:
             if GPIO.input(21) == GPIO.HIGH:
                 GPIO.output(17, GPIO.HIGH)  # Turn on relay
-                count ++ 1
-                print("Relay ON")
-                print(count)
+                count += 1  # Increment count when relay is on
+                print("Relay ON, Count:", count)
             else:
+                if count > 0:  # Only print when there was a previous count
+                    print("Final count before relay off:", count)
                 GPIO.output(17, GPIO.LOW)  # Turn off relay
+                count = 0  # Reset count when relay is off
                 print("Relay OFF")
             time.sleep(0.1)  # Sleep for 100 milliseconds
 
