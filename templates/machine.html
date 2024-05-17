@@ -55,6 +55,7 @@
                 }
             });
 
+
             socket.on('update_tickets', function(data) {
                 document.getElementById('tickets').innerText = data.tickets;
             });

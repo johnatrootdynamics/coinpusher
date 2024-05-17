@@ -111,7 +111,7 @@ def main():
             else:
                 if count > 0:  # Only print when there was a previous count
                     print("Final count before relay off:", count)
-                    sio.emit('update_tickets', {'machine_id': '1', 'tickets_won': count})
+                    sio.emit('update_tickets', {'machine_id': '1', 'tickets': count})
                   # Turn off relay
                 count = 0  # Reset count when relay is off
                 print("Relay OFF")
