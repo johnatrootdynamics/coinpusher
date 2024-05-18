@@ -115,6 +115,15 @@
                     alert('Not enough tokens. Remaining: ' + data.remaining_tokens);
                 }
             });
+
+            
+            function updateTokenCount() {
+                var tokenElement = document.getElementById('tokens');
+                var currentTokens = parseInt(tokenElement.innerText);
+                if (currentTokens > 0) {
+                    tokenElement.innerText = currentTokens - 1;
+                }
+            }
         });
     </script>
 </head>
