@@ -46,7 +46,7 @@ def load_user(user_id):
     user = cursor.fetchone()
     cursor.close()
     if user:
-        session['user_id'] = user['id']
+        
         return User(id=user['id'], username=user['username'], plays=user['plays'], tickets_won=user['tickets_won'])
     return None       
 
@@ -100,6 +100,7 @@ def login():
         if user and check_password_hash(user['password'], password):
             user_obj = User(id=user['id'], username=user['username'], plays=user['plays'], tickets_won=user['tickets_won'])
             login_user(user_obj)
+            session['user_id'] = user['id']
             return redirect(url_for('index'))
         else:
             flash('Invalid username or password')
