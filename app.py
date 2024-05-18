@@ -292,13 +292,13 @@ def check_and_update_tokens(user_id, tokens_to_add):
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT plays FROM users WHERE id = %s", (user_id,))
     result = cursor.fetchone()
-    if result and result[0] >= tokens_to_add:
-        new_balance = result[0] - tokens_to_add
+    if result and result >= tokens_to_add:
+        new_balance = result - tokens_to_add
         cursor.execute("UPDATE users SET plays = %s WHERE id = %s", (new_balance, user_id))
         mysql.connection.commit()
         return True, new_balance
     cursor.close()
-    return False, result[0] if result else 0
+    return False, result if result else 0
 
 @socketio.on('deposit_tokens',namespace='/webclient')
 def handle_deposit_tokens(data):
