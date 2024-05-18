@@ -301,7 +301,7 @@ def check_and_update_tokens(user_id, tokens_to_add):
 
 @socketio.on('deposit_tokens',namespace='/webclient')
 def handle_deposit_tokens(data):
-    user_id = request.sid  # Assuming user_id is stored in session or derived somehow
+    user_id = User.id  # Assuming user_id is stored in session or derived somehow
     success, balance = check_and_update_tokens(user_id, data['tokens'])
     if success:
         emit('tokens_update', {'success': True, 'tokens_added': data['tokens'], 'remaining_tokens': balance})
