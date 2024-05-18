@@ -86,7 +86,7 @@
             });
 
             socket.on('update_tokens', function(data) {
-                document.getElementById('tokens').innerText = data.tokens;
+                document.getElementById('tokens').innerText = data.tokens_added;
             });
 
             document.getElementById('leftButton').addEventListener('click', function() {
