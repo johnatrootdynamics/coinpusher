@@ -4,49 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Machine Control</title>
+    <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
     <style>
-        #button-container { text-align: center; padding: 20px; }
-        .control-button { margin: 10px; width: 150px; }
-        #status, #rpi-status { text-align: center; margin-top: 20px; font-size: 24px; }
-        #rpi-status { color: #007bff; } /* Blue for Raspberry Pi status */
-        .info-box { margin-top: 20px; text-align: center; font-size: 20px; }
-        .display-box { padding: 10px 20px; background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 5px; font-size: 1.5rem; width: 100%; }
-        .label-box { margin-bottom: 0.5rem; }
+        #button-container {
+            text-align: center;
+            padding: 20px;
+        }
+        .control-button {
+            margin: 10px;
+            width: 150px; /* Fixed width for the buttons */
+        }
+        #status, #rpi-status {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 24px;
+        }
+        #rpi-status {
+            color: #007bff; /* Bootstrap primary blue */
+        }
+        .info-box {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 20px;
+        }
+        .display-box {
+            padding: 10px 20px;
+            background-color: #f8f9fa; /* Bootstrap light background */
+            border: 1px solid #dee2e6; /* Bootstrap border */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 1.5rem; /* Larger text size */
+            width: 100%; /* Full width of the column */
+        }
+        .label-box {
+            margin-bottom: 0.5rem; /* Space between label and number box */
+        }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var socket = io(location.origin + "/webclient");
 
-            socket.on('update_tokens', function(data) {
-                var tokens = parseInt(data.tokens_added);
-                document.getElementById('tokens').innerText = tokens;
-                updateButtonState(tokens); // Check and update button state based on token count
+            socket.on('connect', function() {
+                console.log('Connected to the server');
+                socket.emit('client_connected', { machine_id: "{{ machine[0].id }}", new_status: "1" });
             });
 
-            function updateButtonState(tokens) {
-                var leftButton = document.getElementById('leftButton');
-                var rightButton = document.getElementById('rightButton');
-                if (tokens <= 0) {
-                    leftButton.disabled = true;
-                    rightButton.disabled = true;
-                } else {
-                    leftButton.disabled = false;
-                    rightButton.disabled = false;
+            socket.on('rpi_status', function(data) {
+                var statusElement = document.getElementById('rpi-status');
+                statusElement.innerHTML = data.connected ? 'Raspberry Pi Connection: Connected' : 'Raspberry Pi Connection: Disconnected';
+                statusElement.style.color = data.connected ? 'green' : 'red';
+            });
+
+            socket.on('status_updated', function(data) {
+                var statusElement = document.getElementById('status');
+                if (data.machine_id === "{{ machine[0].id }}") {
+                    var statuses = {
+                        "1": "Current Status: Connected",
+                        "2": "Current Status: Disconnected",
+                        "default": "Current Status: Unknown"
+                    };
+                    statusElement.innerHTML = statuses[data.new_status] || statuses['default'];
                 }
-            }
+            });
+
+            socket.on('update_tickets', function(data) {
+                document.getElementById('tickets').innerText = data.tickets;
+            });
+
+            socket.on('update_tokens', function(data) {
+                var tokensElement = document.getElementById('tokens');
+                tokensElement.innerText = data.tokens_added;
+                updateButtonState(parseInt(tokensElement.innerText));
+            });
 
             document.getElementById('leftButton').addEventListener('click', function() {
                 socket.emit('button_push', { machine_id: "1", action: "left" });
-                console.log('Left button clicked');
                 updateTokenCount(-1);
             });
 
             document.getElementById('rightButton').addEventListener('click', function() {
                 socket.emit('button_push', { machine_id: "1", action: "right" });
-                console.log('Right button clicked');
                 updateTokenCount(-1);
+            });
+
+            document.getElementById('depositFive').addEventListener('click', function() {
+                socket.emit('deposit_tokens', { tokens: 5 });
+            });
+
+            document.getElementById('depositTen').addEventListener('click', function() {
+                socket.emit('deposit_tokens', { tokens: 10 });
+            });
+
+            socket.on('tokens_update', function(data) {
+                if (data.success) {
+                    alert('Tokens added: ' + data.tokens_added);
+                } else {
+                    alert('Not enough tokens. Remaining: ' + data.remaining_tokens);
+                }
             });
 
             function updateTokenCount(change) {
@@ -56,13 +111,20 @@
                 tokenElement.innerText = newTokenCount;
                 updateButtonState(newTokenCount);
             }
+
+            function updateButtonState(tokens) {
+                var leftButton = document.getElementById('leftButton');
+                var rightButton = document.getElementById('rightButton');
+                leftButton.disabled = tokens <= 0;
+                rightButton.disabled = tokens <= 0;
+            }
         });
     </script>
 </head>
 <body class="bg-light">
     <div class="container mt-5">
         <h1 class="display-4 text-center mb-4">{{ machine[0].name }}</h1>
-        <div id="status" class="alert alert-primary">Current Status: Connecting...</div>
+        <div id="status" class="alert alert-primary">Current Status: Connecting.....</div>
         <div id="rpi-status">Raspberry Pi Connection: Checking...</div>
         <div class="row">
             <div class="col-md-6">
