@@ -287,9 +287,28 @@ def handle_update_machine(data):
 #     finally:
 #         cursor.close()
 
+def check_and_update_tokens(user_id, tokens_to_add):
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT plays FROM users WHERE user_id = %s", (user_id,))
+    result = cursor.fetchone()
+    if result and result[0] >= tokens_to_add:
+        new_balance = result[0] - tokens_to_add
+        cursor.execute("UPDATE users SET plays = %s WHERE user_id = %s", (new_balance, user_id))
+        mysql.connection.commit()
+        return True, new_balance
+    cursor.close()
+    return False, result[0] if result else 0
 
-
-
+@socketio.on('deposit_tokens')
+def handle_deposit_tokens(data):
+    user_id = request.sid  # Assuming user_id is stored in session or derived somehow
+    success, balance = check_and_update_tokens(user_id, data['tokens'])
+    if success:
+        emit('tokens_update', {'success': True, 'tokens_added': data['tokens'], 'remaining_tokens': balance})
+        # Additional emit to Raspberry Pi if needed
+        socketio.emit('play_tokens', {'machine_id': 1, 'plays_added': data['tokens']}, namespace='/machine')
+    else:
+        emit('tokens_update', {'success': False, 'remaining_tokens': balance})
 
 
 if __name__ == '__main__':

@@ -98,6 +98,21 @@
                 socket.emit('button_push', { machine_id: "1", action: "right" });
                 console.log('Right button clicked');
             });
+            document.getElementById('depositFive').addEventListener('click', function() {
+                socket.emit('deposit_tokens', { tokens: 5 });
+            });
+
+            document.getElementById('depositTen').addEventListener('click', function() {
+                socket.emit('deposit_tokens', { tokens: 10 });
+            });
+
+            socket.on('tokens_update', function(data) {
+                if (data.success) {
+                    alert('Tokens added: ' + data.tokens_added);
+                } else {
+                    alert('Not enough tokens. Remaining: ' + data.remaining_tokens);
+                }
+            });
         });
     </script>
 </head>
@@ -123,6 +138,10 @@
         <div id="button-container">
             <button id="leftButton" class="btn btn-lg btn-primary control-button">Left</button>
             <button id="rightButton" class="btn btn-lg btn-primary control-button">Right</button>
+        </div>
+        <div id="token-controls">
+            <button id="depositFive">Deposit 5 Tokens</button>
+            <button id="depositTen">Deposit 10 Tokens</button>
         </div>
     </div>
 </body>

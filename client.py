@@ -8,6 +8,10 @@ GPIO.setwarnings(False)
 
 
 
+
+
+GPIO.setup(17, GPIO.OUT)
+
 def turn_off_gpio(pin):
 
     # Set up the pin as an output
@@ -86,6 +90,30 @@ def setup_gpio():
     GPIO.setmode(GPIO.BCM)  # Use BCM GPIO numbering
     GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Set GPIO 21 as input
     GPIO.setup(5, GPIO.OUT)  # Set GPIO 17 as output for the relay
+
+
+@sio.event(namespace='/machine')
+def play_tokens(data):
+    tokens = int(data['tokens'])  # Ensure the tokens are handled as an integer
+    token_clicks = tokens // 5  # Use integer division to determine how many times to activate the relay
+
+    GPIO.setmode(GPIO.BCM)  # Set the GPIO numbering system to BCM
+    GPIO.setup(17, GPIO.OUT)  # Setup GPIO 17 as an output for the relay
+
+    try:
+        for _ in range(token_clicks):
+            GPIO.output(17, GPIO.HIGH)  # Turn on the relay
+            time.sleep(0.1)  # Relay is on for 0.1 seconds
+            GPIO.output(17, GPIO.LOW)  # Turn off the relay
+            time.sleep(0.1)  # Wait for 0.1 seconds before potentially turning it on again
+    finally:
+        GPIO.cleanup(17) 
+
+
+
+
+
+
 
 def main():
     setup_gpio()
