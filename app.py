@@ -221,7 +221,7 @@ def handle_rpi_disconnect():
 
 @socketio.on('button_push', namespace='/webclient')
 def handle_button_push(data):
-    emit('button_push', data ,broadcast=True)
+    emit('button_push', data, namespace='/machine', broadcast=True)
     os.write(1, b'got button_push from webclient ')
 
 @socketio.on('update_machine')
