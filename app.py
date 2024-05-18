@@ -232,7 +232,7 @@ def handle_rpi_disconnect():
     emit('rpi_status', {'connected': False}, namespace='/webclient', broadcast=True)
 
 @socketio.on('status_check', namespace='/webclient')
-def handle_rpi_statuscheck():
+def handle_rpi_statuscheck(data):
     global raspberry_pi_connected
     raspberry_pi_connected = False
     emit('rpi_status', {'connected': raspberry_pi_connected}, namespace='/webclient', broadcast=True)

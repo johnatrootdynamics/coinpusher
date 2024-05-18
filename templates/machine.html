@@ -92,11 +92,13 @@
             document.getElementById('leftButton').addEventListener('click', function() {
                 socket.emit('button_push', { machine_id: "1", action: "left" });
                 console.log('Left button clicked');
+                updateTokenCount();
             });
 
             document.getElementById('rightButton').addEventListener('click', function() {
                 socket.emit('button_push', { machine_id: "1", action: "right" });
                 console.log('Right button clicked');
+                updateTokenCount();
             });
             document.getElementById('depositFive').addEventListener('click', function() {
                 socket.emit('deposit_tokens', { tokens: 5 });
