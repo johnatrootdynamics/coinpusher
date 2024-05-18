@@ -97,7 +97,7 @@ def login():
         cursor.close()
 
         if user and check_password_hash(user['password'], password):
-            user_obj = User(id=user['id'], username=user['username'])
+            user_obj = User(id=user['id'], username=user['username'], plays=user['plays'], tickets_won=user['tickets_won'])
             login_user(user_obj)
             return redirect(url_for('index'))
         else:
