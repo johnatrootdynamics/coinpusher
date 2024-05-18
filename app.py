@@ -300,11 +300,11 @@ def check_and_update_tokens(user_id, tokens_to_add):
         result = cursor.fetchone()
         
         # Check if we got a result and if there are enough plays available
-        if result is None or result[0] < tokens_to_add:
-            return False, 0 if result is None else result[0]
+        if result is None or result['plays'] < tokens_to_add:
+            return False, 0 if result is None else result['plays']
         
         # Calculate new balance of tokens
-        new_balance = result[0] - tokens_to_add
+        new_balance = result['plays'] - tokens_to_add
         
         # Update the user's plays in the database
         cursor.execute("UPDATE users SET plays = %s WHERE id = %s", (new_balance, user_id))
