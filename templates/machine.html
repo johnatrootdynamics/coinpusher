@@ -99,12 +99,12 @@
                 console.log('Right button clicked');
             });
             document.getElementById('depositFive').addEventListener('click', function() {
-                socket.emit('deposit_tokens', { tokens: 5 },namespace="/webclient");
+                socket.emit('deposit_tokens', { tokens: 5 });
                 console.log('deposited 5');
             });
 
             document.getElementById('depositTen').addEventListener('click', function() {
-                socket.emit('deposit_tokens', { tokens: 10 },namespace="/webclient");
+                socket.emit('deposit_tokens', { tokens: 10 });
                 console.log('deposited 10');
             });
 
