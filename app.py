@@ -303,14 +303,20 @@ def check_and_update_tokens(user_id, tokens_to_add):
 
 @socketio.on('deposit_tokens',namespace='/webclient')
 def handle_deposit_tokens(data):
-    user_id = session['user_id']  # Assuming user_id is stored in session or derived somehow
-    success, balance = check_and_update_tokens(user_id, data['tokens'])
-    if success:
-        emit('tokens_update', {'success': True, 'tokens_added': data['tokens'], 'remaining_tokens': balance},namespace='/webclient')
-        # Additional emit to Raspberry Pi if needed
-        socketio.emit('play_tokens', {'machine_id': 1, 'plays_added': data['tokens']}, namespace='/machine')
-    else:
-        emit('tokens_update', {'success': False, 'remaining_tokens': balance},namespace='/webclient')
+    user_id = session['user_id']
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT plays FROM users WHERE id = %s", (user_id,))
+    result = cursor.fetchone()
+    emit('tokens_update', {'success': True, 'number of tokens': result },namespace='/webclient')
+
+    # Assuming user_id is stored in session or derived somehow
+    # success, balance = check_and_update_tokens(user_id, data['tokens'])
+    # if success:
+    #     emit('tokens_update', {'success': True, 'tokens_added': data['tokens'], 'remaining_tokens': balance},namespace='/webclient')
+    #     # Additional emit to Raspberry Pi if needed
+    #     socketio.emit('play_tokens', {'machine_id': 1, 'plays_added': data['tokens']}, namespace='/machine')
+    # else:
+    #     emit('tokens_update', {'success': False, 'remaining_tokens': balance},namespace='/webclient')
 
 
 if __name__ == '__main__':
