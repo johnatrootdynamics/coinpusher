@@ -41,7 +41,7 @@
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var socket = io(location.origin + '/webclient');
+            var socket = io();
 
             socket.on('connect', function() {
                 console.log('Connected to the server');
