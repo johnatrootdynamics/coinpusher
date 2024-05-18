@@ -33,9 +33,11 @@ login_manager.login_view = 'login'
 
 
 class User(UserMixin):
-    def __init__(self, id, username):
+    def __init__(self, id, username, plays, tickets_won):
         self.id = id
         self.username = username
+        self.plays = plays
+        self.tickets_won = tickets_won
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -113,6 +115,15 @@ def logout():
 def index():
     return render_template('index.html')
 
+@app.route('/profile/<int:user_id>')
+def profile(user_id):
+    try:
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT id, username, plays, tickets_won FROM users WHERE id=%s", (user_id,))
+        user_info = cursor.fetchall()
+    except Exception as e:
+        return("no user found")
+    return render_template('profile.html', user_info=user_info)
 
 
 @app.route('/machines')
@@ -190,10 +201,10 @@ def handle_myevent(data):
     print("Sayin client is connected dawg")
     socketio.send('got "my event"')
 
-@socketio.on('update_tickets')
+@socketio.on('update_tickets', namespace='/machine')
 def handle_myevent(data):
     print("adding tickets")
-    emit('update_tickets', data, broadcast=True)
+    emit('update_tickets', data, namespace='/webclient', broadcast=True)
 
 @socketio.on('disconnect')
 def handle_disconnect():
