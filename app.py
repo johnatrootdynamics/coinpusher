@@ -152,6 +152,12 @@ def handle_rpi_connect():
     raspberry_pi_connected = True
     emit('rpi_status', {'connected': True}, broadcast=True)
 
+@socketio.on('connect', namespace='/webclient')
+def handle_webclient_connect():
+    global webclient_connected
+    weclient_connected = True
+    emit('webclient_status', {'connected': True}, broadcast=True)
+
 @socketio.on('connect')
 def handle_connect():
     print("Client connected")
