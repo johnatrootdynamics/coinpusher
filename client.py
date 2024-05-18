@@ -31,15 +31,6 @@ def button_push(LR):
         GPIO.output("24", GPIO.LOW)
 
 
-
-
-
-
-
-def joinroom():
-    sio.emit('joinroom', {'machine_id': '1'})
-    print("tryin to join room")
-
 # Create a Socket.IO client instance
 sio = socketio.Client(logger=True, engineio_logger=True)  # Logging is optional but helpful for debugging
 

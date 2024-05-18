@@ -155,7 +155,7 @@ def handle_connect():
 @socketio.on('client_connected')
 def client_connected(data):
     print("Client connected")
-    emit('status_update', data, broadcast=True)
+    emit('status_updated', data, broadcast=True)
 
     # Assuming client sends their identifier as part of the connection request
 

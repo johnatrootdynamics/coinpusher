@@ -46,6 +46,7 @@
             socket.on('connect', function() {
                 console.log('Connected to the server');
                 socket.emit('client_connected', { machine_id: "{{ machine[0].id }}", new_status: "1" });
+                console.log('Sent client_connected update to server')
             });
 
             socket.on('status_updated', function(data) {
