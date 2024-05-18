@@ -46,6 +46,7 @@ def load_user(user_id):
     user = cursor.fetchone()
     cursor.close()
     if user:
+        session['user_id'] = user['id']
         return User(id=user['id'], username=user['username'], plays=user['plays'], tickets_won=user['tickets_won'])
     return None       
 
@@ -99,6 +100,7 @@ def login():
         if user and check_password_hash(user['password'], password):
             user_obj = User(id=user['id'], username=user['username'], plays=user['plays'], tickets_won=user['tickets_won'])
             login_user(user_obj)
+            session['user_id'] = 
             return redirect(url_for('index'))
         else:
             flash('Invalid username or password')
@@ -301,7 +303,7 @@ def check_and_update_tokens(user_id, tokens_to_add):
 
 @socketio.on('deposit_tokens',namespace='/webclient')
 def handle_deposit_tokens(data):
-    user_id = User.id  # Assuming user_id is stored in session or derived somehow
+    user_id = session['user_id']  # Assuming user_id is stored in session or derived somehow
     success, balance = check_and_update_tokens(user_id, data['tokens'])
     if success:
         emit('tokens_update', {'success': True, 'tokens_added': data['tokens'], 'remaining_tokens': balance},namespace='/webclient')
