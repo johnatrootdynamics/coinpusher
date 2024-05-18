@@ -150,7 +150,7 @@ def machine_page(machine_id):
 def handle_rpi_connect():
     global raspberry_pi_connected
     raspberry_pi_connected = True
-    emit('rpi_status', {'connected': True}, broadcast=True)
+    emit('rpi_status', {'connected': True}, namespace='/webclient', broadcast=True)
 
 @socketio.on('connect', namespace='/webclient')
 def handle_webclient_connect():
