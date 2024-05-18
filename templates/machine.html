@@ -41,13 +41,26 @@
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var socket = io();
+            var socket = io(location.origin + '/webclient');
 
             socket.on('connect', function() {
                 console.log('Connected to the server');
                 socket.emit('client_connected', { machine_id: "{{ machine[0].id }}", new_status: "1" });
                 console.log('Sent client_connected update to server')
             });
+
+
+            socket.on('rpi_status', function(data) {
+                var statusElement = document.getElementById('rpi-status');
+                if (data.connected) {
+                    statusElement.innerHTML = 'Raspberry Pi Connection: Connected';
+                    statusElement.style.color = 'green';
+                } else {
+                    statusElement.innerHTML = 'Raspberry Pi Connection: Disconnected';
+                    statusElement.style.color = 'red';
+                }
+            });
+
 
             socket.on('status_updated', function(data) {
                 console.log('Status update received:', data);
@@ -91,6 +104,7 @@
     <div class="container mt-5">
         <h1 class="display-4 text-center mb-4">{{ machine[0].name }}</h1> <h1 class="display-4 text-center mb-4">{{ machine[0].id }}</h1>
         <div id="status" class="alert alert-primary">Current Status: Connecting.....</div>
+        <div id="rpi-status">Raspberry Pi Connection: Checking...</div>
         <div class="row">
             <div class="col-md-6">
                 <div class="info-box text-center">

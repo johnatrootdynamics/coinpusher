@@ -140,7 +140,7 @@ def main():
 
 try:
     while True:
-        sio.connect('http://coinpusheronline.root-dynamics.com')
+        sio.connect('http://coinpusheronline.root-dynamics.com', namespaces=["/machine"])
         # Bind the signal handler to handle SIGINT (CTRL+C)
         signal.signal(signal.SIGINT, signal_handler)
         main()

@@ -146,6 +146,11 @@ def machine_page(machine_id):
 
 
 
+@socketio.on('connect', namespace='/raspberrypi')
+def handle_rpi_connect():
+    global raspberry_pi_connected
+    raspberry_pi_connected = True
+    emit('rpi_status', {'connected': True}, namespace='/machine', broadcast=True)
 
 @socketio.on('connect')
 def handle_connect():
@@ -200,6 +205,13 @@ def handle_disconnect():
     #     mysql.connection.commit()
     #     cursor.close()
      print("Disconnected")
+
+@socketio.on('disconnect', namespace='/raspberrypi')
+def handle_rpi_disconnect():
+    global raspberry_pi_connected
+    raspberry_pi_connected = False
+    emit('rpi_status', {'connected': False}, namespace='/webclient', broadcast=True)
+
 
 @socketio.on('button_push')
 def handle_button_push(data):
