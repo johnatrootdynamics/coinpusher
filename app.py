@@ -290,33 +290,47 @@ def handle_update_machine(data):
 #         cursor.close()
 
 def check_and_update_tokens(user_id, tokens_to_add):
+    # Create a new database cursor
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT plays FROM users WHERE id = %s", (user_id,))
-    result = cursor.fetchone()
-    if result and result[0] >= tokens_to_add:
+    
+    # Try to ensure that all database operations and cursor handling are done safely
+    try:
+        # Execute a query to fetch the current number of plays for the user
+        cursor.execute("SELECT plays FROM users WHERE id = %s", (user_id,))
+        result = cursor.fetchone()
+        
+        # Check if we got a result and if there are enough plays available
+        if result is None or result[0] < tokens_to_add:
+            return False, 0 if result is None else result[0]
+        
+        # Calculate new balance of tokens
         new_balance = result[0] - tokens_to_add
+        
+        # Update the user's plays in the database
         cursor.execute("UPDATE users SET plays = %s WHERE id = %s", (new_balance, user_id))
         mysql.connection.commit()
+        
         return True, new_balance
-    cursor.close()
-    return False, result if result[0] else 0
+    
+    finally:
+        # Ensure that the cursor is closed after operation
+        cursor.close()
 
 @socketio.on('deposit_tokens',namespace='/webclient')
 def handle_deposit_tokens(data):
     user_id = session['user_id']
-    cursor = mysql.connection.cursor()
-    cursor.execute("SELECT plays FROM users WHERE id = %s", (user_id,))
-    result = cursor.fetchone()
-    emit('tokens_update', {'success': True, 'number of tokens': result },namespace='/webclient')
+    # cursor = mysql.connection.cursor()
+    # cursor.execute("SELECT plays FROM users WHERE id = %s", (user_id,))
+    # result = cursor.fetchone()
+    # emit('tokens_update', {'success': True, 'number of tokens': result },namespace='/webclient')
 
-    # Assuming user_id is stored in session or derived somehow
-    # success, balance = check_and_update_tokens(user_id, data['tokens'])
-    # if success:
-    #     emit('tokens_update', {'success': True, 'tokens_added': data['tokens'], 'remaining_tokens': balance},namespace='/webclient')
-    #     # Additional emit to Raspberry Pi if needed
-    #     socketio.emit('play_tokens', {'machine_id': 1, 'plays_added': data['tokens']}, namespace='/machine')
-    # else:
-    #     emit('tokens_update', {'success': False, 'remaining_tokens': balance},namespace='/webclient')
+    success, balance = check_and_update_tokens(user_id, data['tokens'])
+    if success:
+        emit('tokens_update', {'success': True, 'tokens_added': data['tokens'], 'remaining_tokens': balance},namespace='/webclient')
+        # Additional emit to Raspberry Pi if needed
+        socketio.emit('play_tokens', {'machine_id': 1, 'plays_added': data['tokens']}, namespace='/machine')
+    else:
+        emit('tokens_update', {'success': False, 'remaining_tokens': balance},namespace='/webclient')
 
 
 if __name__ == '__main__':
