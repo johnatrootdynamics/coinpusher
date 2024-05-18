@@ -52,10 +52,10 @@
                 var statusElement = document.getElementById('status');
                 if (data.machine_id === "{{ machine[0].id }}") {
                     // Adjusting display based on machine_status
-                    if (data.new_status === 1) {
+                    if (data.new_status === "1") {
                         statusElement.innerHTML = 'Current Status: Connected';
                     } 
-                    else if (data.new_status === 2) {
+                    else if (data.new_status === "2") {
                         statusElement.innerHTML = 'Current Status: Disconnected';
                     } 
                     else {
