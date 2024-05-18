@@ -218,6 +218,11 @@ def handle_rpi_disconnect():
     raspberry_pi_connected = False
     emit('rpi_status', {'connected': False}, namespace='/webclient', broadcast=True)
 
+@socketio.on('status_check', namespace='/webclient')
+def handle_rpi_statuscheck():
+    global raspberry_pi_connected
+    raspberry_pi_connected = False
+    emit('rpi_status', {'connected': raspberry_pi_connected}, namespace='/webclient', broadcast=True)
 
 @socketio.on('button_push', namespace='/webclient')
 def handle_button_push(data):

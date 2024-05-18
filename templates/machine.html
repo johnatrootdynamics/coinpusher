@@ -42,6 +42,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var socket = io(location.origin + "/webclient");
+            socket.emit('status_check', {machine_id: "{{ machine[0].id }}"});
 
             socket.on('connect', function() {
                 console.log('Connected to the server');
