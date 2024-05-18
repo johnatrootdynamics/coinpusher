@@ -125,7 +125,7 @@ def main():
                 GPIO.output(5, GPIO.HIGH)  # Turn on relay
                 count += 1  # Increment count when relay is on
                 print("Relay ON, Count:", count)
-                time.sleep(.1)
+                time.sleep(.2)
                 GPIO.output(5, GPIO.LOW)
             else:
                 if count > 0:  # Only print when there was a previous count
