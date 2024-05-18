@@ -212,14 +212,14 @@ def handle_disconnect():
     #     cursor.close()
      print("Disconnected")
 
-@socketio.on('disconnect', namespace='/raspberrypi')
+@socketio.on('disconnect', namespace='/machine')
 def handle_rpi_disconnect():
     global raspberry_pi_connected
     raspberry_pi_connected = False
     emit('rpi_status', {'connected': False}, namespace='/webclient', broadcast=True)
 
 
-@socketio.on('button_push' namespace='/webclient')
+@socketio.on('button_push', namespace='/webclient')
 def handle_button_push(data):
     emit('button_push', data ,broadcast=True)
     os.write(1, b'got button_push from webclient ')
