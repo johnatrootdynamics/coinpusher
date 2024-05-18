@@ -146,7 +146,7 @@ def machine_page(machine_id):
 
 
 
-@socketio.on('connect', namespace='/raspberrypi')
+@socketio.on('connect', namespace='/machine')
 def handle_rpi_connect():
     global raspberry_pi_connected
     raspberry_pi_connected = True
