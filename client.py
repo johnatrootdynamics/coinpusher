@@ -106,7 +106,7 @@ def main():
                   # Turn off relay
                 count = 0  # Reset count when relay is off
                 print("Relay OFF")
-            time.sleep(0.05)  # Sleep for 100 milliseconds
+            time.sleep(0.1)  # Sleep for 100 milliseconds
 
     except KeyboardInterrupt:
         print("Program terminated by user")
