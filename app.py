@@ -152,9 +152,13 @@ def handle_connect():
     print("Client connected")
     # Assuming client sends their identifier as part of the connection request
 
-@socketio.event
-def joinroom(sid):
-    socketio.enter_room(sid, 'clients')
+@socketio.on('client_connected')
+def client_connected(data):
+    print("Client connected")
+    emit('status_update', data, broadcast=True)
+
+    # Assuming client sends their identifier as part of the connection request
+
 
 @socketio.on('session_data')
 def session_data(data):

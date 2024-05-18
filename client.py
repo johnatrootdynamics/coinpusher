@@ -148,11 +148,11 @@ def main():
 
 
 try:
-    sio.connect('http://coinpusheronline.root-dynamics.com')
-    # Bind the signal handler to handle SIGINT (CTRL+C)
-    signal.signal(signal.SIGINT, signal_handler)
-    main()
-    # joinroom()
-    sio.wait()
+    while True:
+        sio.connect('http://coinpusheronline.root-dynamics.com')
+        # Bind the signal handler to handle SIGINT (CTRL+C)
+        signal.signal(signal.SIGINT, signal_handler)
+        main()
+        sio.wait()
 except socketio.exceptions.ConnectionError as e:
     print("Failed to connect to the server:", e)
