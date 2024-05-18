@@ -94,7 +94,7 @@ def setup_gpio():
 
 @sio.event(namespace='/machine')
 def play_tokens(data):
-    tokens = int(data['tokens'])  # Ensure the tokens are handled as an integer
+    tokens = int(data['plays_added'])  # Ensure the tokens are handled as an integer
     token_clicks = tokens // 5  # Use integer division to determine how many times to activate the relay
 
     GPIO.setmode(GPIO.BCM)  # Set the GPIO numbering system to BCM
