@@ -40,7 +40,7 @@ def connect():
     print("Connected to the server.")
     sio.emit('update_machine', {'machine_id':'1', 'machine_status':'1'})  # Example of sending data to the server
 
-@sio.event
+@sio.event()
 def message(data):
     print('Received data from server:', data)
 
@@ -51,7 +51,7 @@ def update_machine_info():
 def update_machine_info2():
     sio.emit('update_machine', {'machine_id': '1', 'machine_status': '3'})
 
-@sio.event
+@sio.event(namespace='/machine')
 def button_push(data):
     LR = data['action']
     if (LR == "left"):
