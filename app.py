@@ -46,7 +46,7 @@ def load_user(user_id):
     user = cursor.fetchone()
     cursor.close()
     if user:
-        return User(id=user['id'], username=user['username'])
+        return User(id=user['id'], username=user['username'], plays=user['plays'], tickets_won=user['tickets_won'])
     return None       
 
 @app.route('/register', methods=['GET', 'POST'])
