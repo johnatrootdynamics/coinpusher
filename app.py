@@ -290,11 +290,11 @@ def handle_update_machine(data):
 
 def check_and_update_tokens(user_id, tokens_to_add):
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT plays FROM users WHERE user_id = %s", (user_id,))
+    cursor.execute("SELECT plays FROM users WHERE id = %s", (user_id,))
     result = cursor.fetchone()
     if result and result[0] >= tokens_to_add:
         new_balance = result[0] - tokens_to_add
-        cursor.execute("UPDATE users SET plays = %s WHERE user_id = %s", (new_balance, user_id))
+        cursor.execute("UPDATE users SET plays = %s WHERE id = %s", (new_balance, user_id))
         mysql.connection.commit()
         return True, new_balance
     cursor.close()
