@@ -50,7 +50,7 @@
             socket.on('status_updated', function(data) {
                 console.log('Status update received:', data);
                 var statusElement = document.getElementById('status');
-                if (data.machine_id === "{{ machine[0].id }") {
+                if (data.machine_id === "{{ machine[0].id }}") {
                     // Adjusting display based on machine_status
                     if (data.new_status === 1) {
                         statusElement.innerHTML = 'Current Status: Connected';
