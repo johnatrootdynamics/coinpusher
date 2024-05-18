@@ -128,6 +128,7 @@ def list_machines():
         cursor.close()
 
 @app.route('/machine/<int:machine_id>')
+@login_required
 def machine_page(machine_id):
     try:
         cursor = mysql.connection.cursor()
