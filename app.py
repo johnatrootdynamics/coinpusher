@@ -299,7 +299,7 @@ def check_and_update_tokens(user_id, tokens_to_add):
     cursor.close()
     return False, result[0] if result else 0
 
-@socketio.on('deposit_tokens')
+@socketio.on('deposit_tokens',namespace='/webclient')
 def handle_deposit_tokens(data):
     user_id = request.sid  # Assuming user_id is stored in session or derived somehow
     success, balance = check_and_update_tokens(user_id, data['tokens'])
