@@ -78,6 +78,7 @@ def status_updated(data):
 @sio.event
 def disconnect():
     print("Disconnected from the server.")
+    sio.emit('disconnect', {'machine_id': '1', 'machine_status': '2'})
 
 def signal_handler(sig, frame):
     print('Disconnecting...')
