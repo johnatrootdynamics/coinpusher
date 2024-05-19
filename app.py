@@ -167,10 +167,10 @@ def handle_rpi_connect():
     emit('rpi_status', {'connected': True}, namespace='/webclient', broadcast=True)
 
 @socketio.on('connect', namespace='/webclient')
-def handle_webclient_connect(data):
+def handle_webclient_connect():
     global webclient_connected
     weclient_connected = True
-    emit('webclient_status', {'connected': True, 'user_id': data['user_id']}, broadcast=True)
+    #emit('webclient_status', {'connected': True, 'user_id': data['user_id']}, broadcast=True)
 
 @socketio.on('connect')
 def handle_connect():
