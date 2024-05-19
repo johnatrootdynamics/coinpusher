@@ -27,9 +27,48 @@
             transform: scale(1.1); /* Enlarge the card by 10% on hover */
             transition: transform 0.2s; /* Animation timing */
         }
+        body {
+            padding-top: 80px; /* Increased to give space for the fixed navbar */
+        }
+        .container {
+            text-align: center;
+        }
+        .header {
+            margin-bottom: 30px;
+        }
+        .summary {
+            font-size: 20px;
+            color: #555;
+            margin-bottom: 20px;
+        }
+        .link-to-machines {
+            margin-top: 20px;
+        }
+        .navbar {
+            background-color: #f8f9fa; /* Light background for the navbar */
+        }
     </style>
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">Online Coin Pusher</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <h1 class="my-4 text-center" style="color: #007bff;">Machines List</h1>
     <div class="container">
         <div class="row">
