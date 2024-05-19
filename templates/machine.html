@@ -8,57 +8,26 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
     <style>
-        #button-container {
-            text-align: center;
-            padding: 20px;
-        }
-        .control-button {
-            margin: 10px;
-            width: 150px; /* Fixed width for the buttons */
-        }
-        #status, #rpi-status {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 24px;
-        }
-        #rpi-status {
-            color: #007bff; /* Bootstrap primary blue */
-        }
-        .info-box {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 20px;
-        }
-        .display-box {
-            padding: 10px 20px;
-            background-color: #f8f9fa; /* Bootstrap light background */
-            border: 1px solid #dee2e6; /* Bootstrap border */
-            border-radius: 5px; /* Rounded corners */
-            font-size: 1.5rem; /* Larger text size */
-            width: 100%; /* Full width of the column */
-        }
-        .label-box {
-            margin-bottom: 0.5rem; /* Space between label and number box */
-        }
         body {
-            padding-top: 80px; /* Increased to give space for the fixed navbar */
+            padding-top: 80px; /* Make space for fixed navbar */
         }
-        .container {
+        .container, .user-info {
             text-align: center;
         }
-        .header {
-            margin-bottom: 30px;
-        }
-        .summary {
-            font-size: 20px;
-            color: #555;
-            margin-bottom: 20px;
-        }
-        .link-to-machines {
+        .header, .info-box, .user-info {
             margin-top: 20px;
+        }
+        .display-box, .control-button {
+            margin: 10px auto;
+            padding: 10px 20px;
+            font-size: 1.5rem;
+            width: 100%; /* Full width for better display */
         }
         .navbar {
-            background-color: #f8f9fa; /* Light background for the navbar */
+            background-color: #f8f9fa;
+        }
+        .label-box {
+            font-size: 20px;
         }
     </style>
     <script>
@@ -71,72 +40,57 @@
             });
 
             socket.on('rpi_status', function(data) {
-                var statusElement = document.getElementById('rpi-status');
-                statusElement.innerHTML = data.connected ? 'Raspberry Pi Connection: Connected' : 'Raspberry Pi Connection: Disconnected';
-                statusElement.style.color = data.connected ? 'green' : 'red';
+                document.getElementById('rpi-status').innerHTML = data.connected ? 'Raspberry Pi Connection: Connected' : 'Raspberry Pi Connection: Disconnected';
+                document.getElementById('rpi-status').style.color = data.connected ? 'green' : 'red';
             });
 
             socket.on('status_updated', function(data) {
-                var statusElement = document.getElementById('status');
-                if (data.machine_id === "{{ machine[0].id }}") {
-                    var statuses = {
-                        "1": "Current Status: Connected",
-                        "2": "Current Status: Disconnected",
-                        "default": "Current Status: Unknown"
-                    };
-                    statusElement.innerHTML = statuses[data.new_status] || statuses['default'];
-                }
+                var statuses = {
+                    "1": "Current Status: Connected",
+                    "2": "Current Status: Disconnected",
+                    "default": "Current Status: Unknown"
+                };
+                document.getElementById('status').innerHTML = statuses[data.new_status] || statuses['default'];
             });
 
             socket.on('update_tickets', function(data) {
                 document.getElementById('tickets').innerText = data.tickets;
+                document.getElementById('total-tickets').innerText = data.total_tickets; // Additional data field for total tickets
             });
 
             socket.on('update_tokens', function(data) {
-                var tokensElement = document.getElementById('tokens');
-                tokensElement.innerText = data.tokens_added;
-                updateButtonState(parseInt(tokensElement.innerText));
+                document.getElementById('tokens').innerText = data.tokens_added;
+                document.getElementById('total-tokens').innerText = data.total_tokens; // Additional data field for total tokens
+                updateButtonState(parseInt(data.tokens_added));
             });
 
-            document.getElementById('leftButton').addEventListener('click', function() {
-                socket.emit('button_push', { machine_id: "1", action: "left" });
-                updateTokenCount(-1);
+            ['leftButton', 'rightButton'].forEach(buttonId => {
+                document.getElementById(buttonId).addEventListener('click', function() {
+                    socket.emit('button_push', { machine_id: "1", action: this.id.replace('Button', '').toLowerCase() });
+                    updateTokenCount(-1);
+                });
             });
 
-            document.getElementById('rightButton').addEventListener('click', function() {
-                socket.emit('button_push', { machine_id: "1", action: "right" });
-                updateTokenCount(-1);
-            });
-
-            document.getElementById('depositFive').addEventListener('click', function() {
-                socket.emit('deposit_tokens', { tokens: 5 });
-            });
-
-            document.getElementById('depositTen').addEventListener('click', function() {
-                socket.emit('deposit_tokens', { tokens: 10 });
+            ['depositFive', 'depositTen'].forEach(buttonId => {
+                document.getElementById(buttonId).addEventListener('click', function() {
+                    socket.emit('deposit_tokens', { tokens: parseInt(this.id.replace('deposit', '')) });
+                });
             });
 
             socket.on('tokens_update', function(data) {
-                if (data.success) {
-                    alert('Tokens added: ' + data.tokens_added);
-                } else {
-                    alert('Not enough tokens. Remaining: ' + data.remaining_tokens);
-                }
+                alert(data.success ? 'Tokens added: ' + data.tokens_added : 'Not enough tokens. Remaining: ' + data.remaining_tokens);
             });
 
             function updateTokenCount(change) {
-                var tokenElement = document.getElementById('tokens');
-                var currentTokens = parseInt(tokenElement.innerText);
-                var newTokenCount = currentTokens + change;
-                tokenElement.innerText = newTokenCount;
-                updateButtonState(newTokenCount);
+                var tokensElement = document.getElementById('tokens');
+                var currentTokens = parseInt(tokensElement.innerText);
+                tokensElement.innerText = currentTokens + change;
+                updateButtonState(currentTokens + change);
             }
 
             function updateButtonState(tokens) {
-                var leftButton = document.getElementById('leftButton');
-                var rightButton = document.getElementById('rightButton');
-                leftButton.disabled = tokens <= 0;
-                rightButton.disabled = tokens <= 0;
+                document.getElementById('leftButton').disabled = tokens <= 0;
+                document.getElementById('rightButton').disabled = tokens <= 0;
             }
         });
     </script>
@@ -146,46 +100,4 @@
         <div class="container">
             <a class="navbar-brand" href="/">Online Coin Pusher</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/register">Register</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="container mt-5">
-        <h1 class="display-4 text-center mb-4">{{ machine[0].name }}</h1>
-        <div id="status" class="alert alert-primary">Current Status: Connecting.....</div>
-        <div id="rpi-status">Raspberry Pi Connection: Checking...</div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="info-box text-center">
-                    <div class="label-box">Tickets</div>
-                    <div id="tickets" class="display-box">0</div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="info-box text-center">
-                    <div class="label-box">Tokens Left</div>
-                    <div id="tokens" class="display-box">0</div>
-                </div>
-            </div>
-        </div>
-        <div id="button-container">
-            <button id="leftButton" class="btn btn-lg btn-primary control-button">Left</button>
-            <button id="rightButton" class="btn btn-lg btn-primary control-button">Right</button>
-        </div>
-        <div id="token-controls">
-            <button id="depositFive">Deposit 5 Tokens</button>
-            <button id="depositTen">Deposit 10 Tokens</button>
-        </div>
-    </div>
-</body>
-</html>
+                <span class="
