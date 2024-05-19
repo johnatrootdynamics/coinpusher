@@ -149,7 +149,7 @@ def machine_page(machine_id):
         machine = cursor.fetchall()  # Fetch all results
         if not machine:
             return "Machine not found", 404
-        return render_template('machine.html', machine=machine)
+        return render_template('machine.html', machine=machine, user=session['user_id'])
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     finally:
@@ -166,10 +166,10 @@ def handle_rpi_connect():
     emit('rpi_status', {'connected': True}, namespace='/webclient', broadcast=True)
 
 @socketio.on('connect', namespace='/webclient')
-def handle_webclient_connect():
+def handle_webclient_connect(data):
     global webclient_connected
     weclient_connected = True
-    emit('webclient_status', {'connected': True}, broadcast=True)
+    emit('webclient_status', {'connected': True, 'user_id': data['user_id']}, broadcast=True)
 
 @socketio.on('connect')
 def handle_connect():
@@ -205,8 +205,40 @@ def handle_myevent(data):
 
 @socketio.on('update_tickets', namespace='/machine')
 def handle_myevent(data):
-    print("adding tickets")
-    emit('update_tickets', data, namespace='/webclient', broadcast=True)
+    print("Adding tickets")
+    user_id = data['user_id']
+    new_tickets = data['tickets']
+
+    # Establish a connection to the database
+    conn = mysql.connector.connect(user='username', password='password', host='localhost', database='your_database')
+    cursor = conn.cursor()
+
+    # Fetch the current number of tickets
+    cursor.execute("SELECT tickets_won FROM users WHERE id = %s", (user_id,))
+    result = cursor.fetchone()
+    if result:
+        current_tickets = result[0]
+        total_tickets = current_tickets + new_tickets
+        # Update the database with the new total
+        cursor.execute("UPDATE users SET tickets_won = %s WHERE id = %s", (total_tickets, user_id))
+        conn.commit()
+        print("Tickets updated to:", total_tickets)
+        # Emit the new total back to the web client
+        emit('update_tickets', {'user_id': user_id, 'total_tickets': total_tickets}, namespace='/webclient', broadcast=True)
+    else:
+        print("User not found")
+
+    cursor.close()
+    conn.close()
+
+
+
+
+
+
+
+
+
 
 @socketio.on('disconnect')
 def handle_disconnect(data):

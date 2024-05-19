@@ -94,6 +94,12 @@ def setup_gpio():
 
 
 @sio.event(namespace='/machine')
+def webclient_status(data):
+    global user_id
+    user_id = data['user_id']
+    return user_id
+
+@sio.event(namespace='/machine')
 def play_tokens(data):
     tokens = int(data['plays_added'])  # Ensure the tokens are handled as an integer
     token_clicks = tokens // 5  # Use integer division to determine how many times to activate the relay
@@ -128,10 +134,12 @@ def main():
                 print("Relay ON, Count:", count)
                 time.sleep(.2)
                 GPIO.output(5, GPIO.LOW)
+                time.sleep(.1)
             else:
+                
                 if count > 0:  # Only print when there was a previous count
                     print("Final count before relay off:", count)
-                    sio.emit('update_tickets', {'machine_id': '1', 'tickets': count}, namespace='/machine')
+                    sio.emit('update_tickets', {'machine_id': '1', 'tickets': count, 'user_id': user_id}, namespace='/machine')
                   # Turn off relay
                 count = 0  # Reset count when relay is off
                 print("Relay OFF")
