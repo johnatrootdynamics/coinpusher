@@ -100,4 +100,46 @@
         <div class="container">
             <a class="navbar-brand" href="/">Online Coin Pusher</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 class="header">{{ machine[0].name }}</h1>
+        <div id="status">Current Status: Connecting...</div>
+        <div id="rpi-status">Raspberry Pi Connection: Checking...</div>
+        <div class="row">
+            <div class="col-md-6 info-box">
+                <div class="label-box">Session Tickets</div>
+                <div id="tickets" class="display-box">0</div>
+            </div>
+            <div class="col-md-6 info-box">
+                <div class="label-box">Session Tokens Left</div>
+                <div id="tokens" class="display-box">0</div>
+            </div>
+            <div class="col-md-6 info-box">
+                <div class="label-box">Total Tickets</div>
+                <div id="total-tickets" class="display-box">0</div>
+            </div>
+            <div class="col-md-6 info-box">
+                <div class="label-box">Total Tokens</div>
+                <div id="total-tokens" class="display-box">0</div>
+            </div>
+        </div>
+        <div id="button-container">
+            <button id="leftButton" class="btn btn-lg btn-primary control-button">Left</button>
+            <button id="rightButton" class="btn btn-lg btn-primary control-button">Right</button>
+            <div id="token-controls">
+                <button id="depositFive" class="btn btn-lg btn-primary control-button">Deposit 5 Tokens</button>
+                <button id="depositTen" class="btn btn-lg btn-primary control-button">Deposit 10 Tokens</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
