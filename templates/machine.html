@@ -30,70 +30,86 @@
             font-size: 20px;
         }
     </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var socket = io(location.origin + "/webclient");
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var socket = io(location.origin + "/webclient");
 
-            socket.on('connect', function() {
-                console.log('Connected to the server');
-                socket.emit('client_connected', { machine_id: "{{ machine[0].id }}", new_status: "1", user_id: "{{ user }}" });
-            });
+        socket.on('connect', function() {
+            console.log('Connected to the server');
+            socket.emit('client_connected', { machine_id: "{{ machine[0].id }}", new_status: "1", user_id: "{{ user }}" });
+        });
 
-            socket.on('rpi_status', function(data) {
-                document.getElementById('rpi-status').innerHTML = data.connected ? 'Raspberry Pi Connection: Connected' : 'Raspberry Pi Connection: Disconnected';
-                document.getElementById('rpi-status').style.color = data.connected ? 'green' : 'red';
-            });
+        socket.on('rpi_status', function(data) {
+            var rpiStatusElement = document.getElementById('rpi-status');
+            rpiStatusElement.innerHTML = data.connected ? 'Raspberry Pi Connection: Connected' : 'Raspberry Pi Connection: Disconnected';
+            rpiStatusElement.style.color = data.connected ? 'green' : 'red';
+        });
 
-            socket.on('status_updated', function(data) {
-                var statuses = {
-                    "1": "Current Status: Connected",
-                    "2": "Current Status: Disconnected",
-                    "default": "Current Status: Unknown"
-                };
-                document.getElementById('status').innerHTML = statuses[data.new_status] || statuses['default'];
-            });
+        socket.on('status_updated', function(data) {
+            var statusElement = document.getElementById('status');
+            var statusText = {
+                "1": "Current Status: Connected",
+                "2": "Current Status: Disconnected",
+                "default": "Current Status: Unknown"
+            }[data.new_status] || "Current Status: Unknown";
+            statusElement.innerHTML = statusText;
+        });
 
-            socket.on('update_tickets', function(data) {
-                document.getElementById('tickets').innerText = data.tickets;
-                document.getElementById('total-tickets').innerText = data.total_tickets; // Additional data field for total tickets
-            });
+        socket.on('update_tickets', function(data) {
+            document.getElementById('tickets').innerText = data.tickets;
+            document.getElementById('total-tickets').innerText = data.total_tickets;
+        });
 
-            socket.on('update_tokens', function(data) {
-                document.getElementById('tokens').innerText = data.tokens_added;
-                document.getElementById('total-tokens').innerText = data.total_tokens; // Additional data field for total tokens
-                updateButtonState(parseInt(data.tokens_added));
-            });
+        socket.on('update_tokens', function(data) {
+            var tokensElement = document.getElementById('tokens');
+            var totalTokensElement = document.getElementById('total-tokens');
+            tokensElement.innerText = data.tokens_added;
+            totalTokensElement.innerText = data.total_tokens;
+            updateButtonState(parseInt(data.tokens_added));
+        });
 
-            ['leftButton', 'rightButton'].forEach(buttonId => {
-                document.getElementById(buttonId).addEventListener('click', function() {
-                    socket.emit('button_push', { machine_id: "1", action: this.id.replace('Button', '').toLowerCase() });
-                    updateTokenCount(-1);
-                });
-            });
+        document.getElementById('leftButton').addEventListener('click', function() {
+            socket.emit('button_push', { machine_id: "1", action: "left" });
+            updateTokenCount(-1);
+        });
 
-            ['depositFive', 'depositTen'].forEach(buttonId => {
-                document.getElementById(buttonId).addEventListener('click', function() {
-                    socket.emit('deposit_tokens', { tokens: parseInt(this.id.replace('deposit', '')) });
-                });
-            });
+        document.getElementById('rightButton').addEventListener('click', function() {
+            socket.emit('button_push', { machine_id: "1", action: "right" });
+            updateTokenCount(-1);
+        });
 
-            socket.on('tokens_update', function(data) {
-                alert(data.success ? 'Tokens added: ' + data.tokens_added : 'Not enough tokens. Remaining: ' + data.remaining_tokens);
-            });
+        document.getElementById('depositFive').addEventListener('click', function() {
+            socket.emit('deposit_tokens', { tokens: 5 });
+        });
 
-            function updateTokenCount(change) {
-                var tokensElement = document.getElementById('tokens');
-                var currentTokens = parseInt(tokensElement.innerText);
-                tokensElement.innerText = currentTokens + change;
-                updateButtonState(currentTokens + change);
-            }
+        document.getElementById('depositTen').addEventListener('click', function() {
+            socket.emit('deposit_tokens', { tokens: 10 });
+        });
 
-            function updateButtonState(tokens) {
-                document.getElementById('leftButton').disabled = tokens <= 0;
-                document.getElementById('rightButton').disabled = tokens <= 0;
+        socket.on('tokens_update', function(data) {
+            if (data.success) {
+                alert('Tokens added: ' + data.tokens_added);
+            } else {
+                alert('Not enough tokens. Remaining: ' + data.remaining_tokens);
             }
         });
-    </script>
+
+        function updateTokenCount(change) {
+            var tokensElement = document.getElementById('tokens');
+            var currentTokens = parseInt(tokensElement.innerText);
+            var newTokenCount = currentTokens + change;
+            tokensElement.innerText = newTokenCount;
+            updateButtonState(newTokenCount);
+        }
+
+        function updateButtonState(tokens) {
+            var leftButton = document.getElementById('leftButton');
+            var rightButton = document.getElementById('rightButton');
+            leftButton.disabled = tokens <= 0;
+            rightButton.disabled = tokens <= 0;
+        }
+    });
+</script>
 </head>
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
