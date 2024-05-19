@@ -147,9 +147,10 @@ def machine_page(machine_id):
         cursor = mysql.connection.cursor()
         cursor.execute("SELECT id, name, location, machine_status FROM machines WHERE id=%s", (machine_id,))
         machine = cursor.fetchall()  # Fetch all results
+        user = session['user_id']
         if not machine:
             return "Machine not found", 404
-        return render_template('machine.html', machine=machine, user=session['user_id'])
+        return render_template('machine.html', machine=machine, user=user)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     finally:
