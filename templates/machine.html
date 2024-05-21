@@ -34,11 +34,6 @@
     document.addEventListener('DOMContentLoaded', function () {
         var socket = io(location.origin + "/webclient");
 
-        // socket.on('connect', function() {
-        //     console.log('Connected to the server');
-        //     socket.emit('connect', { machine_id: "{{ machine[0].id }}", new_status: "1", user_id: "{{ user }}" });
-        // });
-
         socket.on('rpi_status', function(data) {
             var rpiStatusElement = document.getElementById('rpi-status');
             rpiStatusElement.innerHTML = data.connected ? 'Raspberry Pi Connection: Connected' : 'Raspberry Pi Connection: Disconnected';
@@ -63,9 +58,11 @@
         socket.on('update_tokens', function(data) {
             var tokensElement = document.getElementById('tokens');
             var totalTokensElement = document.getElementById('total-tokens');
-            tokensElement.innerText = data.tokens_added;
-            totalTokensElement.innerText = data.total_tokens;
-            updateButtonState(parseInt(data.tokens_added));
+            var currentTokens = parseInt(tokensElement.innerText);
+            var newTokens = currentTokens + data.tokens_added; // Adding received tokens to the current session tokens
+            tokensElement.innerText = newTokens; // Update the session tokens display
+            totalTokensElement.innerText = data.total_tokens; // Update the total tokens display
+            updateButtonState(newTokens); // Update button state based on new session token count
         });
 
         document.getElementById('leftButton').addEventListener('click', function() {
@@ -110,6 +107,7 @@
         }
     });
 </script>
+
 </head>
 <body class="bg-light">
     <nav class="navbar navbar-expand-lg navbar-light fixed-top">
