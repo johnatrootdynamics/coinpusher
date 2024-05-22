@@ -11,6 +11,8 @@ GPIO.setwarnings(False)
 
 
 GPIO.setup(17, GPIO.OUT)
+GPIO.setup("23", GPIO.OUT)
+GPIO.setup("5", GPIO.OUT)
 
 def turn_off_gpio(pin):
 
@@ -133,7 +135,7 @@ def main():
                 GPIO.output(5, GPIO.LOW)  # Turn on relay
                 count += 1  # Increment count when relay is on
                 print("Relay ON, Count:", count)
-                time.sleep(.2)
+                time.sleep(.1)
                 GPIO.output(5, GPIO.HIGH)
                 time.sleep(.1)
             else:
