@@ -92,6 +92,7 @@ def setup_gpio():
     GPIO.setmode(GPIO.BCM)  # Use BCM GPIO numbering
     GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)  # Set GPIO 21 as input
     GPIO.setup(5, GPIO.OUT)  # Set GPIO 17 as output for the relay
+    GPIO.setup(5, GPIO.LOW)  # Set GPIO 17 as output for the relay
 
 @sio.event(namespace='/machine')
 def webclient_status(data):
