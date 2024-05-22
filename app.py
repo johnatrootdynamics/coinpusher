@@ -212,8 +212,7 @@ def handle_myevent(data):
     
 
     # Establish a connection to the database
-    conn = mysql.connector.connect(user='username', password='password', host='localhost', database='your_database')
-    cursor = conn.cursor()
+    cursor = mysql.connection.cursor()
 
     # Fetch the current number of tickets
     cursor.execute("SELECT tickets_won FROM users WHERE id = %s", (user_id,))
@@ -223,7 +222,7 @@ def handle_myevent(data):
         total_tickets = current_tickets + new_tickets
         # Update the database with the new total
         cursor.execute("UPDATE users SET tickets_won = %s WHERE id = %s", (total_tickets, user_id))
-        conn.commit()
+        mysql.connection.commit()
         print("Tickets updated to:", total_tickets)
         # Emit the new total back to the web client
         emit('update_tickets', {'user_id': user_id, 'total_tickets': total_tickets}, namespace='/webclient', broadcast=True)
@@ -231,7 +230,6 @@ def handle_myevent(data):
         print("User not found")
 
     cursor.close()
-    conn.close()
 
 
 
