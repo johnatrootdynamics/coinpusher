@@ -209,6 +209,7 @@ def handle_myevent(data):
     print("Adding tickets")
     user_id = data['user_id']
     new_tickets = data['tickets']
+    
 
     # Establish a connection to the database
     conn = mysql.connector.connect(user='username', password='password', host='localhost', database='your_database')

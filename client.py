@@ -137,7 +137,6 @@ def main():
                 print("Relay ON, Count:", count)
                 time.sleep(.1)
                 GPIO.output(5, GPIO.HIGH)
-                time.sleep(.1)
             else:
                 
                 if count > 0:  # Only print when there was a previous count
