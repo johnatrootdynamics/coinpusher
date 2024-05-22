@@ -11,8 +11,8 @@ GPIO.setwarnings(False)
 
 
 GPIO.setup(17, GPIO.OUT)
-GPIO.setup("23", GPIO.OUT)
-GPIO.setup("5", GPIO.OUT)
+GPIO.setup(23, GPIO.OUT)
+GPIO.setup(5, GPIO.OUT)
 
 def turn_off_gpio(pin):
 
