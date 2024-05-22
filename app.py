@@ -219,7 +219,7 @@ def handle_myevent(data):
     result = cursor.fetchone()
     if result:
         current_tickets = result
-        total_tickets = current_tickets + new_tickets
+        total_tickets = float(current_tickets) + float(new_tickets)
         # Update the database with the new total
         cursor.execute("UPDATE users SET tickets_won = %s WHERE id = %s", (total_tickets, user_id))
         mysql.connection.commit()
