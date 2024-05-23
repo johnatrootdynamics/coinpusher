@@ -72,7 +72,7 @@ def button_push(data):
         time.sleep(.1)
         GPIO.output(24, GPIO.LOW)
         print("right Button pushed")
-    sio.emit('subtract_token', {'machine_id': '1', 'success': True}, namespace='/machine')
+    sio.emit('subtract_token', {'machine_id': '1'}, namespace='/machine')
 
 @sio.event
 def status_updated(data):
