@@ -55,6 +55,7 @@
             document.getElementById('total-tickets').innerText = data.total_tickets;
         });
 
+
         socket.on('update_tokens', function(data) {
             var tokensElement = document.getElementById('tokens');
             var totalTokensElement = document.getElementById('total-tokens');
