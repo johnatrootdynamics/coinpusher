@@ -72,13 +72,10 @@
             socket.emit('button_push', { machine_id: "1", action: "right" });
         });
 
-        socket.on('subtract_tokens', function(data) {
-            if (data.success) {
-                updateTokenCount(-data.tokens);
-            } else {
+        socket.on('subtract_token', function(data) {
                 console.log('Error subtracting tokens');
                 updateTokenCount(-data.tokens);
-            }
+            
         });
 
         document.getElementById('depositFive').addEventListener('click', function() {
