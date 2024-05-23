@@ -207,7 +207,7 @@ def handle_myevent(data):
 
 @socketio.on('subtract_token', namespace='/machine')
 def subtract_token(data):
-    emit('subtract_token', {data}, namespace='/webclient')
+    emit('subtract_token', data, namespace='/webclient')
 
 @socketio.on('update_tickets', namespace='/machine')
 def handle_myevent(data):
