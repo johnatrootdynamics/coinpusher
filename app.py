@@ -204,11 +204,17 @@ def handle_myevent(data):
     print("Sayin client is connected dawg")
     socketio.send('got "my event"')
 
+
+@socketio.on('subtract_token', namespace='/machine')
+def handle_myevent(data):
+    emit('subtract_token', {data}, namespace='/webclient')
+
 @socketio.on('update_tickets', namespace='/machine')
 def handle_myevent(data):
     print("Adding tickets")
     user_id = data['user_id']
     new_tickets = data['tickets']
+
     
 
     # Establish a connection to the database
