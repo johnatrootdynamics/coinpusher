@@ -75,7 +75,7 @@
         var machineId = "{{ machine[0].id }}"; // Store the machine ID from Flask into a JavaScript variable
 
         socket.on('subtract_token', function(data) {
-            if (data.success && data.machine_id === machineId) {
+            if (data.machine_id === machineId) {
                 updateTokenCount(-1);  // Subtracts 1 token from the displayed remaining tokens
             } else {
                 console.log('Error subtracting tokens or incorrect machine ID {{machine[0].id}}');
