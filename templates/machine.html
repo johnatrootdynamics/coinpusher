@@ -60,7 +60,7 @@
             var tokensElement = document.getElementById('tokens');
             var totalTokensElement = document.getElementById('total-tokens');
             tokensElement.innerText = data.tokens_added; // Update the session tokens display directly
-            totalTokensElement.innerText = data.total_tokens; // Update the total tokens display
+            totalTokensElement.innerText = data.remaining_tokens; // Update the total tokens display
             updateButtonState(parseInt(data.tokens_added));
         });
 
