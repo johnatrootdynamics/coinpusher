@@ -78,7 +78,7 @@
             if (data.success && data.machine_id === machineId) {
                 updateTokenCount(-1);  // Subtracts 1 token from the displayed remaining tokens
             } else {
-                console.log('Error subtracting tokens or incorrect machine ID');
+                console.log('Error subtracting tokens or incorrect machine ID {{machine[0].id}}');
             }
         });
 
