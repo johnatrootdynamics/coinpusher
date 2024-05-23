@@ -364,7 +364,7 @@ def handle_deposit_tokens(data):
 
     success, balance = check_and_update_tokens(user_id, data['tokens'])
     if success:
-        emit('update_tokens', {'success': True, 'tokens_added': data['tokens'], 'remaining_tokens': balance},namespace='/webclient')
+        emit('tokens_update', {'success': True, 'tokens_added': data['tokens'], 'remaining_tokens': balance},namespace='/webclient')
         # Additional emit to Raspberry Pi if needed
         socketio.emit('play_tokens', {'machine_id': 1, 'plays_added': data['tokens']}, namespace='/machine')
     else:
