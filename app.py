@@ -50,6 +50,17 @@ def load_user(user_id):
         return User(id=user['id'], username=user['username'], plays=user['plays'], tickets_won=user['tickets_won'])
     return None       
 
+
+def load_user_data(user_id):
+    cursor = mysql.connection.cursor()
+    cursor.execute('SELECT * FROM users WHERE id = %s', (user_id,))
+    user = cursor.fetchone()
+    cursor.close()
+    if user:
+        return user
+    return None   
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -174,14 +185,16 @@ def list_machines():
 @app.route('/machine/<int:machine_id>')
 @login_required
 def machine_page(machine_id):
+    
     try:
+        userdata = load_user_data(session['user_id'])
         cursor = mysql.connection.cursor()
         cursor.execute("SELECT id, name, location, machine_status FROM machines WHERE id=%s", (machine_id,))
         machine = cursor.fetchall()  # Fetch all results
         user = session['user_id']
         if not machine:
             return "Machine not found", 404
-        return render_template('machine.html', machine=machine, user=user)
+        return render_template('machine.html', machine=machine, user=user, userdata=userdata)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     finally:
