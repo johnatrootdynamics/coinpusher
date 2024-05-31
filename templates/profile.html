@@ -1,50 +1,79 @@
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-<style>
-    body {
-        padding-top: 80px; /* Increased to give space for the fixed navbar */
-    }
-    .container {
-        text-align: center;
-    }
-    .header {
-        margin-bottom: 30px;
-    }
-    .summary {
-        font-size: 20px;
-        color: #555;
-        margin-bottom: 20px;
-    }
-    .link-to-machines {
-        margin-top: 20px;
-    }
-    .navbar {
-        background-color: #f8f9fa; /* Light background for the navbar */
-    }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 100px; /* Adjusted for fixed navbar */
+        }
+        .container {
+            text-align: center;
+        }
+        .profile-info, .exchange-buttons {
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .profile-info h3, .exchange-buttons h3 {
+            color: #007bff;
+        }
+        .btn-exchange {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-<!-- Navigation Bar -->
-<nav class="navbar navbar-expand-lg navbar-light fixed-top">
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="/">Online Coin Pusher</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">Register</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
     <div class="container">
-        <a class="navbar-brand" href="/">Online Coin Pusher</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/register">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
-                </li>
-            </ul>
+        <!-- Profile Information -->
+        <div class="profile-info">
+            <h3>Profile Information</h3>
+            <p>ID: {{ user_info[0].id }}</p>
+            <p>Username: {{ user_info[0].username }}</p>
+            <p>Plays: {{ user_info[0].plays }}</p>
+            <p>Tickets Won: {{ user_info[0].tickets_won }}</p>
+        </div>
+
+        <!-- Ticket to Token Exchange -->
+        <div class="exchange-buttons">
+            <h3>Convert Tickets to Tokens</h3>
+            <button class="btn btn-primary btn-exchange" onclick="exchangeTickets(10, 5)">Convert 10 tickets to 5 tokens</button>
+            <button class="btn btn-primary btn-exchange" onclick="exchangeTickets(50, 25)">Convert 50 tickets to 25 tokens</button>
+            <button class="btn btn-primary btn-exchange" onclick="exchangeTickets(100, 50)">Convert 100 tickets to 50 tokens</button>
         </div>
     </div>
-</nav>
 
-
-{{user_info[0].id}}
-{{user_info[0].username}}
-{{user_info[0].plays}}
-{{user_info[0].tickets_won}}
+    <script>
+        function exchangeTickets(tickets, tokens) {
+            console.log(`Exchanging ${tickets} tickets for ${tokens} tokens`); // Placeholder for actual exchange logic
+            // Here you would typically emit an event to the server to handle the exchange
+            // e.g., socket.emit('exchange_tickets', { tickets: tickets, tokens: tokens });
+        }
+    </script>
+</body>
+</html>
