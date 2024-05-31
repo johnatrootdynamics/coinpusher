@@ -30,7 +30,7 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-
+current_user_session = None
 
 class User(UserMixin):
     def __init__(self, id, username, plays, tickets_won):
@@ -208,6 +208,7 @@ def machine_page(machine_id):
 def handle_rpi_connect():
     global raspberry_pi_connected
     raspberry_pi_connected = True
+
     emit('rpi_status', {'connected': True}, namespace='/webclient', broadcast=True)
 
 @socketio.on('connect', namespace='/webclient')
