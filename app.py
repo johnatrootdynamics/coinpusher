@@ -118,6 +118,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/profile/<int:user_id>')
+@login_required
 def profile(user_id):
     try:
         cursor = mysql.connection.cursor()
@@ -129,6 +130,7 @@ def profile(user_id):
 
 
 @app.route('/exchange_tickets', methods=['POST'])
+@login_required
 def exchange_tickets():
     cursor = mysql.connection.cursor()
     data = request.get_json()
