@@ -154,7 +154,6 @@ def exchange_tickets():
         return jsonify(success=False, error=str(e)), 500
     finally:
         cursor.close()
-        db.close()
 
 
 @app.route('/machines')
