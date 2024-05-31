@@ -147,7 +147,7 @@ def exchange_tickets():
             new_ticket_count = result['tickets_won'] - tickets_to_exchange
             cursor.execute("UPDATE users SET tickets_won = %s WHERE id = %s", (new_ticket_count, user_id))
             cursor.execute("UPDATE users SET plays = plays + %s WHERE id = %s", (tokens_to_add, user_id))
-            cursor.commit()
+            mysql.connection.commit()
             return jsonify(success=True)
         else:
             return jsonify(success=False, error="Not enough tickets"), 400
