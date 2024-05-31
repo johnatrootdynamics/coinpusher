@@ -115,7 +115,8 @@ def logout():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    user_id=session['user_id']
+    return render_template('index.html', user_id=user_id)
 
 @app.route('/profile/<int:user_id>')
 @login_required
