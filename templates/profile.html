@@ -70,9 +70,25 @@
 
     <script>
         function exchangeTickets(tickets, tokens) {
-            console.log(`Exchanging ${tickets} tickets for ${tokens} tokens`); // Placeholder for actual exchange logic
-            // Here you would typically emit an event to the server to handle the exchange
-            // e.g., socket.emit('exchange_tickets', { tickets: tickets, tokens: tokens });
+            fetch('/exchange_tickets', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ tickets: tickets, tokens: tokens })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Successfully exchanged ${tickets} tickets for ${tokens} tokens.`);
+                } else {
+                    alert(`Failed to exchange tickets: ${data.error}`);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error exchanging tickets.');
+            });
         }
     </script>
 </body>

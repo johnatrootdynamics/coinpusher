@@ -128,6 +128,35 @@ def profile(user_id):
     return render_template('profile.html', user_info=user_info)
 
 
+@app.route('/exchange_tickets', methods=['POST'])
+def exchange_tickets():
+    cursor = mysql.connection.cursor()
+    data = request.get_json()
+    tickets_to_exchange = int(data['tickets'])
+    tokens_to_add = int(data['tokens'])
+    user_id = request.cookies.get('user_id')  # Assuming user_id is stored in cookies
+
+    try:
+        # Check if user has enough tickets
+        cursor.execute("SELECT tickets_won FROM users WHERE id = %s", (user_id,))
+        result = cursor.fetchone()
+        if result and result[0] >= tickets_to_exchange:
+            # Update user tickets and tokens
+            new_ticket_count = result[0] - tickets_to_exchange
+            cursor.execute("UPDATE users SET tickets_won = %s WHERE id = %s", (new_ticket_count, user_id))
+            cursor.execute("UPDATE users SET plays = plays + %s WHERE id = %s", (tokens_to_add, user_id))
+            cursor.commit()
+            return jsonify(success=True)
+        else:
+            return jsonify(success=False, error="Not enough tickets"), 400
+    except cursor.Error as e:
+        cursor.rollback()
+        return jsonify(success=False, error=str(e)), 500
+    finally:
+        cursor.close()
+        db.close()
+
+
 @app.route('/machines')
 def list_machines():
     cursor = mysql.connection.cursor()
@@ -353,6 +382,9 @@ def check_and_update_tokens(user_id, tokens_to_add):
     finally:
         # Ensure that the cursor is closed after operation
         cursor.close()
+
+
+
 
 @socketio.on('deposit_tokens',namespace='/webclient')
 def handle_deposit_tokens(data):
