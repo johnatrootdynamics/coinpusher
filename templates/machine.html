@@ -59,9 +59,19 @@
         socket.on('update_tokens', function(data) {
             var tokensElement = document.getElementById('tokens');
             var totalTokensElement = document.getElementById('total-tokens');
-            tokensElement.innerText = data.tokens_added; // Update the session tokens display directly
-            totalTokensElement.innerText = data.remaining_tokens; // Update the total tokens display
-            updateButtonState(parseInt(data.tokens_added));
+
+            // Calculate new token count by adding the incoming tokens to the current count
+            var currentTokens = parseInt(tokensElement.innerText);
+            var newTokensCount = currentTokens + data.tokens_added;
+            
+            // Update the session tokens display with the new token count
+            tokensElement.innerText = newTokensCount;
+
+            // Update the total tokens display directly from data
+            totalTokensElement.innerText = data.remaining_tokens;
+
+            // Update the button state based on the new session token count
+            updateButtonState(newTokensCount);
         });
 
         document.getElementById('leftButton').addEventListener('click', function() {
