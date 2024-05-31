@@ -142,9 +142,9 @@ def exchange_tickets():
         # Check if user has enough tickets
         cursor.execute("SELECT tickets_won FROM users WHERE id = %s", (user_id,))
         result = cursor.fetchone()
-        if result and result[0] >= tickets_to_exchange:
+        if result and result['tickets_won'] >= tickets_to_exchange:
             # Update user tickets and tokens
-            new_ticket_count = result[0] - tickets_to_exchange
+            new_ticket_count = result['tickets_won'] - tickets_to_exchange
             cursor.execute("UPDATE users SET tickets_won = %s WHERE id = %s", (new_ticket_count, user_id))
             cursor.execute("UPDATE users SET plays = plays + %s WHERE id = %s", (tokens_to_add, user_id))
             cursor.commit()
