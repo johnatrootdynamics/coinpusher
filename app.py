@@ -134,7 +134,7 @@ def exchange_tickets():
     data = request.get_json()
     tickets_to_exchange = int(data['tickets'])
     tokens_to_add = int(data['tokens'])
-    user_id = request.cookies.get('user_id')  # Assuming user_id is stored in cookies
+    user_id = session['user_id']  # Assuming user_id is stored in cookies
 
     try:
         # Check if user has enough tickets
