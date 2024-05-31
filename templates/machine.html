@@ -51,7 +51,6 @@
         });
 
         socket.on('update_tickets', function(data) {
-            document.getElementById('tickets').innerText = data.tickets;
             document.getElementById('total-tickets').innerText = data.total_tickets;
         });
 
