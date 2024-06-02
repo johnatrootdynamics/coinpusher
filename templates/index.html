@@ -56,7 +56,9 @@
             allowing users to experience the thrill of coin pushing from anywhere.
         </p>
         <a href="/machines" class="btn btn-primary link-to-machines">View Machines</a>
+        {% if user_id %}
         <a href="/profile/{{ user_id }}" class="btn btn-primary link-to-machines">View profile</a>
+        {% endif %}
     </div>
 
     <!-- Optional JavaScript -->
