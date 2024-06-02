@@ -126,7 +126,10 @@ def logout():
 
 @app.route('/')
 def index():
-    user_id = session['user_id']
+    if user_id:
+        user_id = session['user_id']
+    else:
+        user_id = None
     return render_template('index.html', user_id=user_id)
 
 @app.route('/profile/<int:user_id>')
