@@ -126,7 +126,7 @@ def logout():
 
 @app.route('/')
 def index():
-    if session['user_id'];    
+    if session['user_id']:
         user_id = session['user_id']
     else:
         user_id = None
