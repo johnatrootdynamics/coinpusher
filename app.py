@@ -294,7 +294,7 @@ def handle_myevent(data):
 
 
 
-@socketio.on('disconnect')
+@socketio.on('disconnect', namespace='/machine')
 def handle_disconnect(data):
     cursor = mysql.connection.cursor()
     machine_id = data['machine_id']
