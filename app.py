@@ -132,7 +132,10 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
+@app.route('/webcam')
+def webcam():
 
+    return render_template('webcam.html')
 
 @app.route('/')
 def index():
