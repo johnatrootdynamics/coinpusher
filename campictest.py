@@ -1,6 +1,6 @@
 import cv2
 
-cap = cv2.VideoCapture(0,cv2.CAP_MSMF)
+cap = cv2.VideoCapture('/dev/video0', cv2.CAP_MSMF)
 
 if not cap.isOpened():
     print("Error: Could not open video device")
