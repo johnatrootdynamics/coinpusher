@@ -14,14 +14,14 @@ def disconnect():
     print("Disconnected from server")
 
 def send_video():
-    cap = cv2.VideoCapture(1)  # 0 is typically the default camera
+    cap = cv2.VideoCapture(0)  # 0 is typically the default camera
 
     if not cap.isOpened():
         print("Error: Could not open video device")
         return
 
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1920)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1080)
 
     while True:
         ret, frame = cap.read()
