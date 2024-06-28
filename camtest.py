@@ -3,7 +3,7 @@ import asyncio
 import websockets
 
 async def send_video():
-    uri = "ws://your_server_address:port"
+    uri = "ws://coinpusheronline.root-dynamics.com/machine:80"
     async with websockets.connect(uri) as websocket:
         cap = cv2.VideoCapture(0)
 
