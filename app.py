@@ -63,10 +63,11 @@ def load_user_data(user_id):
 
 @socketio.on('video_frame', namespace='/machine')
 def handle_video_frame(data):
-    # Decode the base64-encoded frame and save it to a file
-    frame = base64.b64decode(data)
+    print("Received image data")
+    # Decode the base64-encoded image data
+    image_data = base64.b64decode(data)
     with open("static/frame.jpg", "wb") as f:
-        f.write(frame)
+        f.write(image_data)
 
     # Emit the frame to all connected clients
     emit('update_frame', {'image_data': data}, namespace='/webclient', broadcast=True)
