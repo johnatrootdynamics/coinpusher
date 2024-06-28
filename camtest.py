@@ -1,6 +1,7 @@
 import cv2
 import asyncio
 import websockets
+import base64
 
 async def send_video():
     uri = "ws://coinpusheronline.root-dynamics.com:80"
