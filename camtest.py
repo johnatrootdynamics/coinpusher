@@ -4,7 +4,7 @@ import websockets
 import base64
 
 async def send_video():
-    uri = "ws://coinpusheronline.root-dynamics.com:80"
+    uri = "wss://coinpusheronline.root-dynamics.com/machine"
     async with websockets.connect(uri) as websocket:
         cap = cv2.VideoCapture(0)
 
