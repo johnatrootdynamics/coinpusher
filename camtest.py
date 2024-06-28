@@ -1,6 +1,7 @@
 import cv2
 import base64
 import socketio
+import base64
 
 # Initialize Socket.IO client
 sio = socketio.Client()
