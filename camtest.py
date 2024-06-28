@@ -22,8 +22,8 @@ def send_video():
         return
 
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-    cap.set(cv2.CAP_PROP_FPS, 30)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 800)
+    cap.set(cv2.CAP_PROP_FPS, 100)
     while True:
         ret, frame = cap.read()
         if not ret:
