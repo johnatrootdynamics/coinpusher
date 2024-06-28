@@ -4,7 +4,7 @@ import websockets
 import base64
 
 async def send_video():
-    uri = "wss://coinpusheronline.root-dynamics.com/machine"
+    uri = "wss://coinpusheronline.root-dynamics.com"
     async with websockets.connect(uri) as websocket:
         cap = cv2.VideoCapture(0)
 
@@ -25,7 +25,7 @@ async def send_video():
             _, buffer = cv2.imencode('.jpg', frame)
             jpg_as_text = buffer.tobytes()
 
-            # Send the frame to the server
+            # Send the frame to the servers
             await websocket.send(jpg_as_text)
 
             # To simulate a real-time streaming delay
