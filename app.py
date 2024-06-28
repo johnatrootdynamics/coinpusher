@@ -9,6 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import logging
 import sys
+import base64
 
 dbuser = os.getenv('DBUSER', 'none')
 dbpasswd = os.getenv('DBPASSWD', 'none')
@@ -60,6 +61,15 @@ def load_user_data(user_id):
         return user
     return None   
 
+@socketio.on('video_frame')
+def handle_video_frame(data):
+    # Decode the base64-encoded frame and save it to a file
+    frame = base64.b64decode(data)
+    with open("static/frame.jpg", "wb") as f:
+        f.write(frame)
+
+    # Emit the frame to all connected clients
+    emit('update_frame', {'image_data': data}, broadcast=True)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
