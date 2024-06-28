@@ -1,36 +1,47 @@
 import cv2
-import asyncio
-import websockets
 import base64
+import socketio
 
-async def send_video():
-    uri = "wss://coinpusheronline.root-dynamics.com"
-    async with websockets.connect(uri) as websocket:
-        cap = cv2.VideoCapture(0)
+# Initialize Socket.IO client
+sio = socketio.Client()
 
-        if not cap.isOpened():
-            print("Error: Could not open video device")
-            return
+@sio.event
+def connect():
+    print("Connected to server")
 
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+@sio.event
+def disconnect():
+    print("Disconnected from server")
 
-        while True:
-            ret, frame = cap.read()
-            if not ret:
-                print("Error: Failed to capture image")
-                break
+def send_video():
+    cap = cv2.VideoCapture(0)  # 0 is typically the default camera
 
-            # Encode the frame in JPEG format
-            _, buffer = cv2.imencode('.jpg', frame)
-            jpg_as_text = buffer.tobytes()
+    if not cap.isOpened():
+        print("Error: Could not open video device")
+        return
 
-            # Send the frame to the servers
-            await websocket.send(jpg_as_text)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
-            # To simulate a real-time streaming delay
-            await asyncio.sleep(0.1)
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            print("Error: Failed to capture image")
+            break
 
-        cap.release()
+        # Encode the frame in JPEG format
+        _, buffer = cv2.imencode('.jpg', frame)
+        jpg_as_text = base64.b64encode(buffer).decode('utf-8')
 
-asyncio.get_event_loop().run_until_complete(send_video())
+        # Send the frame to the server
+        sio.emit('video_frame', jpg_as_text, namespace='/machine')
+
+        # To simulate a real-time streaming delay
+        sio.sleep(0.1)
+
+    cap.release()
+
+if __name__ == '__main__':
+    sio.connect('http://coinpusheronline.root-dynamics.com', namespaces=['/machine'])
+    send_video()
+    sio.wait()
