@@ -61,7 +61,7 @@ def load_user_data(user_id):
         return user
     return None   
 
-@socketio.on('video_frame')
+@socketio.on('video_frame', namespace='/machine')
 def handle_video_frame(data):
     # Decode the base64-encoded frame and save it to a file
     frame = base64.b64decode(data)
@@ -69,7 +69,7 @@ def handle_video_frame(data):
         f.write(frame)
 
     # Emit the frame to all connected clients
-    emit('update_frame', {'image_data': data}, broadcast=True)
+    emit('update_frame', {'image_data': data}, namespace='/webclient', broadcast=True)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
