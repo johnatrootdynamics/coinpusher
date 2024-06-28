@@ -43,5 +43,6 @@ def send_video():
 
 if __name__ == '__main__':
     sio.connect('http://coinpusheronline.root-dynamics.com', namespaces=['/machine'])
+    print("Connected")
     send_video()
     sio.wait()
