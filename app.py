@@ -64,13 +64,19 @@ def load_user_data(user_id):
 @socketio.on('video_frame', namespace='/machine')
 def handle_video_frame(data):
     print("Received image data")
+    # # Decode the base64-encoded image data
+    # image_data = base64.b64decode(data)
+    # with open("static/frame.jpg", "wb") as f:
+    #     f.write(image_data)
+    
+    # # Emit the frame to all connected clients
+    # emit('update_frame', {'image_data': data}, namespace='/webclient', broadcast=True)
+
+    print("Received image data")
     # Decode the base64-encoded image data
     image_data = base64.b64decode(data)
-    with open("static/frame.jpg", "wb") as f:
-        f.write(image_data)
-
-    # Emit the frame to all connected clients
-    emit('update_frame', {'image_data': data}, namespace='/webclient', broadcast=True)
+    # Emit the image data to a different namespace
+    emit('video_frame', {'image_data': data}, namespace='/webclient')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
