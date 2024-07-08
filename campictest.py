@@ -12,10 +12,10 @@ cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*'MJPG'))
 
 # Define the codec and create VideoWriter object
 fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-out = cv2.VideoWriter('outputcode.avi', fourcc, 20.0, (800, 600))
+out = cv2.VideoWriter('outputcode.avi', fourcc, 30.0, (800, 600))
 
 # Record for 5 seconds
-num_frames = int(20 * 5)  # 20 fps * 5 seconds
+num_frames = int(30 * 25)  # 20 fps * 5 seconds
 
 for _ in range(num_frames):
     ret, frame = cap.read()
