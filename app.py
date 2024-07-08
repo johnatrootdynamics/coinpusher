@@ -76,7 +76,7 @@ def handle_video_frame(data):
     # Decode the base64-encoded image data
     image_data = base64.b64decode(data)
     # Emit the image data to a different namespace
-    emit('video_frame', {'image_data': data}, namespace='/webclient')
+    emit('update_frame', {'image_data': data}, namespace='/webclient')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
