@@ -11,7 +11,7 @@
     <img id="video-stream" src="" alt="Video Stream">
 
     <script>
-        var socket = io('/webclient');
+        var socket = io(location.origin + "/webclient");
 
         socket.on('connect', function() {
             console.log('Connected to server');
