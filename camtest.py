@@ -37,7 +37,7 @@ def send_video():
         _, buffer = cv2.imencode('.jpg', frame)
         jpg_as_text = base64.b64encode(buffer).decode('utf-8')
 
-        # Send the frame to the server
+        # Send the frame to the servers
         sio.emit('video_frame', jpg_as_text, namespace='/machine')
 
         # To simulate a real-time streaming delay
