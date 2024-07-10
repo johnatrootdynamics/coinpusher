@@ -37,12 +37,13 @@ def send_video():
         sio.emit('video_frame', jpg_as_text, namespace='/machine')
 
         # To simulate a real-time streaming delay
-        sio.sleep(0.1)
+        #sio.sleep(0.1)
 
     cap.release()
 
 GPIO.setup(17, GPIO.OUT)
 GPIO.setup(23, GPIO.OUT)
+GPIO.setup(24, GPIO.OUT)
 GPIO.setup(5, GPIO.OUT)
 
 def turn_off_gpio(pin):
@@ -173,7 +174,7 @@ def main():
                 
                 if count > 0:  # Only print when there was a previous count
                     print("Final count before relay off:", count)
-                    sio.emit('update_tickets', {'machine_id': '1', 'tickets': count, 'user_id': '2'}, namespace='/machine')
+                    sio.emit('update_tickets', {'machine_id': '1', 'tickets': count, 'user_id': '1'}, namespace='/machine')
                   # Turn off relay
                 count = 0  # Reset count when relay is off
                 print("Relay OFF")
