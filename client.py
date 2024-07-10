@@ -53,7 +53,7 @@ def turn_off_gpio(pin):
     
     # Set the pin to LOW
     GPIO.output(pin, GPIO.LOW)
-    print(f"GPIO {pin} set to LOW")
+    #print(f"GPIO {pin} set to LOW")
 
 
 def button_push(LR):
@@ -167,7 +167,7 @@ def main():
             if GPIO.input(21) == GPIO.HIGH:
                 GPIO.output(5, GPIO.LOW)  # Turn on relay
                 count += 1  # Increment count when relay is on
-                print("Relay ON, Count:", count)
+                #print("Relay ON, Count:", count)
                 time.sleep(.1)
                 GPIO.output(5, GPIO.HIGH)
             else:
@@ -177,7 +177,7 @@ def main():
                     sio.emit('update_tickets', {'machine_id': '1', 'tickets': count, 'user_id': '1'}, namespace='/machine')
                   # Turn off relay
                 count = 0  # Reset count when relay is off
-                print("Relay OFF")
+                #print("Relay OFF")
             time.sleep(0.1)  # Sleep for 100 milliseconds
 
     except KeyboardInterrupt:
